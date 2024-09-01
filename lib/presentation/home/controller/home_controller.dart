@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../retail_outlet/model/retail_outlet_model.dart';
+import '../../site/model/common_model.dart';
 import '../../site/model/site_model.dart';
 import '../repo/homepage_repo.dart';
 
@@ -11,9 +13,12 @@ class HomePageController extends GetxController {
   RxInt lengthOfListOfStudents = RxInt(0);
   final List<SiteModel> _allSites = [];
   RxList<SiteModel> listOfSites = RxList.empty();
-  /*final List<StudentModel> _allStudents = [];
-  RxList<StudentModel> listOfStudents = RxList.empty();*/
+  RxList<CityModel> citiesList = RxList.empty();
+
+  final List<RetailOutletModel> _allRetailOutlets = [];
+  RxList<RetailOutletModel> listOfRetailOutlets = RxList.empty();
   var isLoading = false.obs;
+
   /*RxList<CityModel> citiesList = RxList.empty();
   RxList<QuestionModel> questionsList = RxList.empty();*/
 
@@ -22,6 +27,12 @@ class HomePageController extends GetxController {
     // TODO: implement onInit
     super.onInit();
     getList();
+    getCities();
+  }
+
+  getCities() async {
+    citiesList.clear();
+    citiesList.addAll(await HomePageRepo.getCitesData());
   }
 
   void showOtherUserContextMenu() {
@@ -67,17 +78,6 @@ class HomePageController extends GetxController {
     });
   }
 
-  /*getCities() async {
-    citiesList.clear();
-    citiesList.addAll(
-        await CollegeRepo.getCitesData(AuthController.instance.user!.state!));
-  }*/
-
-  /*getQuestions() async {
-    questionsList.clear();
-    questionsList.addAll(await HomePageRepo.getListOfQuestions());
-  }*/
-
   DateTime now = DateTime.now();
 
   getList() async {
@@ -88,15 +88,13 @@ class HomePageController extends GetxController {
       _allSites.addAll(await HomePageRepo.getListOfSites());
       listOfSites.addAll(_allSites);
       lengthOfListOfSites.value = listOfSites.length;
-      /*_allStudents.clear();
-      _allStudents.addAll(await HomePageRepo.getListOfStudents());
-      listOfStudents.addAll(_allStudents);
-      lengthOfListOfStudents.value = listOfStudents.length;
-      */
+      _allRetailOutlets.clear();
+      _allRetailOutlets.addAll(await HomePageRepo.getListOfRetailOutlets());
+      listOfRetailOutlets.addAll(_allRetailOutlets);
+      lengthOfListOfStudents.value = listOfRetailOutlets.length;
     } catch (e) {
       Get.snackbar('Error', 'Please try again later.',
-          colorText: Colors.white,
-          backgroundColor: Colors.blue);
+          colorText: Colors.white, backgroundColor: Colors.blue);
       isLoading(false);
       update();
     }

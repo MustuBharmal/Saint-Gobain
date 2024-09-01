@@ -49,9 +49,14 @@ class SitesController extends GetxController {
 
   void clear() {
     contractorName.value.text = '';
+    contractorPhone.value.text = '';
+    contractorAddress.value.text = '';
     siteAddress.value.text = '';
+    remarks.value.text = '';
+    giveaways.value.text = '';
     cityModifier.value = null;
     typeOfSiteModifier.value = null;
+    paintersList.value = [];
   }
 
   @override
@@ -59,7 +64,11 @@ class SitesController extends GetxController {
     // TODO: implement dispose
     super.dispose();
     contractorName.value.dispose();
+    contractorPhone.value.dispose();
+    contractorAddress.value.dispose();
     siteAddress.value.dispose();
+    remarks.value.dispose();
+    giveaways.value.dispose();
   }
 
   Future<String> uploadImage(
@@ -73,11 +82,11 @@ class SitesController extends GetxController {
     try {
       ImageModel dummy;
       site = SiteModel(
-        dbType: "insertCollege",
+        dbType: "insertSite",
         companyId: AuthController.instance.user?.companyId,
         contractorName: contractorName.value.text,
-        contractorAddress: contractorAddress.value.text,
         contractorPhone: int.parse(contractorPhone.value.text),
+        contractorAddress: contractorAddress.value.text,
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
         siteType: typeOfSiteModifier.value?.siteTypeValue,
@@ -87,8 +96,11 @@ class SitesController extends GetxController {
         painters: paintersList,
         createdBy: AuthController.instance.user!.name ?? "admin",
         createdAt: DateTime.now().toString(),
+        updatedBy: '',
+        updatedAt: '',
         cityName: cityModifier.value?.cityName,
       );
+      LogUtil.debug(site?.toJson());
       site?.siteId = await SiteRepo.insertSite(site!);
       if (site?.siteId != null) {
         for (int i = 0; i < selectedImages.length; i++) {
@@ -120,7 +132,8 @@ class SitesController extends GetxController {
         imageList.add(uploadedImages[i]);
       }
       site = SiteModel(
-        dbType: "updateCollege",
+        dbType: "updateSite",
+        siteId: site!.siteId,
         companyId: AuthController.instance.user?.companyId,
         contractorName: contractorName.value.text,
         contractorAddress: contractorAddress.value.text,
@@ -132,12 +145,14 @@ class SitesController extends GetxController {
         remarks: remarks.value.text,
         giveAWays: giveaways.value.text,
         painters: paintersList,
+        createdBy: site?.createdBy ?? "admin",
+        createdAt: site?.createdAt ?? DateTime.now().toString(),
         updatedBy: AuthController.instance.user!.name ?? "admin",
         updatedAt: DateTime.now().toString(),
         cityName: cityModifier.value?.cityName,
         images: deletedImageList,
       );
-      await SiteRepo.updateOutlet(site!).then((value) {
+      await SiteRepo.updateSite(site!).then((value) {
         HomePageController.instance.listOfSites
             .removeWhere((col) => col.siteId == site!.siteId);
       });
@@ -148,6 +163,7 @@ class SitesController extends GetxController {
         imageList.add(dummy);
       }
       site?.images = imageList;
+      LogUtil.debug(site?.toJson());
       HomePageController.instance.listOfSites.add(site!);
       isLoading(false);
       Dialogs.showSnackBar(Get.context, "Site updated");
@@ -167,6 +183,8 @@ class SitesController extends GetxController {
         contractorName.value.text = site!.contractorName ?? '';
         contractorAddress.value.text = site!.contractorAddress ?? '';
         contractorPhone.value.text = site!.contractorPhone.toString();
+        LogUtil.debug(citiesList.length);
+        LogUtil.debug(typeOfSitesList.length);
         cityModifier.value = citiesList
             .firstWhereOrNull((element) => element.cityName == site!.cityName);
         typeOfSiteModifier.value = typeOfSitesList.firstWhereOrNull(
@@ -176,7 +194,7 @@ class SitesController extends GetxController {
         siteAddress.value.text = site!.siteAddress ?? '';
         remarks.value.text = site!.remarks ?? '';
         giveaways.value.text = site!.giveAWays ?? '';
-        paintersList.value = site!.painters ?? [];
+        paintersList.clear();
         selectedImages.clear();
         uploadedImages.clear();
         deletedId.clear();
@@ -184,6 +202,13 @@ class SitesController extends GetxController {
         if (site!.images!.isNotEmpty) {
           for (int i = 0; i < site!.images!.length; i++) {
             uploadedImages.add(site!.images![i]);
+          }
+        }
+        LogUtil.debug(site!.painters!.length);
+        if (site!.painters!.isNotEmpty) {
+          LogUtil.debug(site!.painters!.length);
+          for (int i = 0; i < site!.painters!.length; i++) {
+            paintersList.add(site!.painters![i]);
           }
         }
 
@@ -198,7 +223,7 @@ class SitesController extends GetxController {
 
   getCities() async {
     citiesList.clear();
-    citiesList.addAll(await SiteRepo.getCitesData());
+    citiesList.addAll(HomePageController.instance.citiesList);
   }
 
   getTypeOfSites() async {

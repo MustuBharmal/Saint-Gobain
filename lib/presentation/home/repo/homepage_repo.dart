@@ -1,7 +1,9 @@
-import 'package:saint_gobain/presentation/site/model/site_model.dart';
+import 'package:saint_gobain/presentation/retail_outlet/model/retail_outlet_model.dart';
 
 import '../../../core/util/log_util.dart';
 import '../../../core/util/storage_util.dart';
+import '../../site/model/common_model.dart';
+import '../../site/model/site_model.dart';
 import '/../../../service/http_service.dart';
 
 import '../../auth/controller/auth_controller.dart';
@@ -12,8 +14,32 @@ abstract class HomePageRepo {
   static const String _companyIdKey = 'company_id';
   static const String _sitesPath = '/api_select/index.php';
   static const String _tokenUpdatePath = '/api_login/index.php';
-  static const String _allStudentsTypeValue = 'getStudentsByState';
+  static const String _dbCityTypeValue = 'getCities';
+  static const String _getCommonPath = '/api_select/index.php';
+  static const String _allOutletTypeValue = 'getOutlets';
   static const String _questionsListTypeValue = 'getQuestions';
+
+  static Future<List<CityModel>> getCitesData() async {
+    List<CityModel> resultList = [];
+    try {
+      Map<String, dynamic> data = {
+        _dbTypeKey: _dbCityTypeValue,
+      };
+      final result = await HttpService.post(_getCommonPath, data);
+      if (result['status'] == 200) {
+        List<dynamic> citiesData = result['data'];
+        for (var element in citiesData) {
+          resultList.add(CityModel.fromJson(element));
+        }
+      } else {
+        throw 'unauthorized';
+      }
+    } catch (e) {
+      LogUtil.error(e);
+      rethrow;
+    }
+    return resultList;
+  }
 
   static Future<String> refreshToken(String token) async {
     try {
@@ -62,22 +88,22 @@ abstract class HomePageRepo {
       rethrow;
     }
   }
-/*
-  static Future<List<StudentModel>> getListOfStudents() async {
-    List<StudentModel> resultList = [];
+
+  static Future<List<RetailOutletModel>> getListOfRetailOutlets() async {
+    List<RetailOutletModel> resultList = [];
     try {
       Map<String, dynamic> data = {
-        _dbTypeKey: _allStudentsTypeValue,
-        _stateIdKey: AuthController.instance.user!.state
+        _dbTypeKey: _allOutletTypeValue,
+        _companyIdKey: AuthController.instance.user!.companyId
       };
       final result = await HttpService.post(
-        _customerPath,
+        _sitesPath,
         data,
       );
       if (result['status'] == 200) {
-        List<dynamic> customersData = result['data'];
-        for (var element in customersData) {
-          resultList.add(StudentModel.fromJson(element));
+        List<dynamic> outletData = result['data'];
+        for (var element in outletData) {
+          resultList.add(RetailOutletModel.fromJson(element));
         }
         return resultList;
       } else {
@@ -88,7 +114,7 @@ abstract class HomePageRepo {
       rethrow;
     }
   }
-
+/*
   static Future<List<QuestionModel>> getListOfQuestions() async {
     List<QuestionModel> resultList = [];
     try {

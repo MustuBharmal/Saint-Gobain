@@ -1,3 +1,5 @@
+import 'common_model.dart';
+
 class SiteModel {
   String? dbType;
   int? siteId;
@@ -91,6 +93,10 @@ class SiteModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    List<dynamic> painter = [];
+    for (int i = 0; i < painters!.length; i++) {
+      painter.add(painters![i].toJson());
+    }
     data['dbtype'] = dbType;
     data['site_id'] = siteId;
     data['contractor_name'] = contractorName;
@@ -102,18 +108,45 @@ class SiteModel {
     data['map_link'] = mapLink;
     data['remarks'] = remarks;
     data['give_aways'] = giveAWays;
-    if (painters != null) {
-      data['painters'] = painters!.map((v) => v.toJson()).toList();
-    }
+    data['painters'] = painter;
     data['created_by'] = createdBy;
     data['created_at'] = createdAt;
     data['updated_by'] = updatedBy;
     data['updated_at'] = updatedAt;
     data['company_id'] = companyId;
     data['city_name'] = cityName;
-    if (images != null) {
-      data['images'] = images!.map((v) => v.toJson()).toList();
+    return data;
+  }
+
+  Map<String, dynamic> toJsonDelete() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    List<dynamic> image = [];
+    for (int i = 0; i < images!.length; i++) {
+      image.add(images![i].toJson());
     }
+    List<dynamic> painter = [];
+    for (int i = 0; i < painters!.length; i++) {
+      painter.add(painters![i].toJson());
+    }
+    data['dbtype'] = dbType;
+    data['site_id'] = siteId;
+    data['contractor_name'] = contractorName;
+    data['contractor_phone'] = contractorPhone;
+    data['contractor_address'] = contractorAddress;
+    data['site_city_id'] = siteCityId;
+    data['site_address'] = siteAddress;
+    data['site_type'] = siteType;
+    data['map_link'] = mapLink;
+    data['remarks'] = remarks;
+    data['give_aways'] = giveAWays;
+    data['painters'] = painter;
+    data['created_by'] = createdBy;
+    data['created_at'] = createdAt;
+    data['updated_by'] = updatedBy;
+    data['updated_at'] = updatedAt;
+    data['company_id'] = companyId;
+    data['city_name'] = cityName;
+    data['deleted_images'] = image;
     return data;
   }
 }
@@ -138,32 +171,3 @@ class Painters {
     return data;
   }
 }
-
-class ImageModel {
-  int? imageId;
-  String? path;
-  int? siteId;
-
-  ImageModel({this.imageId, this.path, this.siteId});
-
-  factory ImageModel.fromJson(Map<String, dynamic> json) {
-    int? imageId = json['image_id'];
-    String? path = json['path'] ?? '';
-    int? siteId = json['site_id'];
-    return ImageModel(
-      imageId: imageId,
-      path: path,
-      siteId: siteId,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['image_id'] = imageId;
-    data['path'] = path;
-    data['site_id'] = siteId;
-    return data;
-  }
-}
-
-

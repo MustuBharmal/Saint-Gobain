@@ -3,14 +3,14 @@ import '../../../core/util/log_util.dart';
 import '../../../service/http_service.dart';
 import '../../auth/models/user_model.dart';
 import '../model/common_model.dart';
-import '../model/site_model.dart';
+import '../model/retail_outlet_model.dart';
 
-abstract class SiteRepo {
+abstract class RetailOutletRepo {
   static const String _getCommonPath = '/api_select/index.php';
   static const String _getUpdatePath = '/api_update/index.php';
   static const String _dbTypeKey = 'dbtype';
   static const String _dbCommonValue = 'getCommons';
-  static const String _dbSiteTypeValue = 'getSites';
+  static const String _dbOutletTypeValue = 'getOutlets';
   static const String _uploadPicPath = '/api_image_upload/index.php';
 
   static Future<String> uploadSiteImage(
@@ -37,10 +37,10 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<int> insertSite(SiteModel site) async {
+  static Future<int> insertOutlet(RetailOutletModel outlet) async {
     try {
-      LogUtil.debug(site.toJson());
-      Map<String, dynamic> data = site.toJson();
+      LogUtil.debug(outlet.toJson());
+      Map<String, dynamic> data = outlet.toJson();
       final result = await HttpService.post(_getUpdatePath, data);
       if (result['status'] == 200) {
         return (result['data']['id']);
@@ -53,10 +53,10 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<void> updateSite(SiteModel site) async {
+  static Future<void> updateOutlet(RetailOutletModel outlet) async {
     try {
-      LogUtil.debug(site.toJsonDelete());
-      Map<String, dynamic> data = site.toJsonDelete();
+      LogUtil.debug(outlet.toJsonDelete());
+      Map<String, dynamic> data = outlet.toJsonDelete();
       final result = await HttpService.post(_getUpdatePath, data);
       if (result['status'] == 200) {
         LogUtil.warning(result['message']);
@@ -69,18 +69,18 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<List<SiteTypeModel>> getTypeOfSitesData() async {
-    List<SiteTypeModel> resultList = [];
+  static Future<List<CustomerTypeModel>> getTypeOfCustomerTypeData() async {
+    List<CustomerTypeModel> resultList = [];
     try {
       Map<String, dynamic> data = {
         _dbTypeKey: _dbCommonValue,
-        "common_type": "site_type"
+        "common_type": "customer_type"
       };
       final result = await HttpService.post(_getCommonPath, data);
       if (result['status'] == 200) {
         List<dynamic> typeOfSitesData = result['data'];
         for (var element in typeOfSitesData) {
-          resultList.add(SiteTypeModel.fromJson(element));
+          resultList.add(CustomerTypeModel.fromJson(element));
         }
       } else {
         throw 'unauthorized';
@@ -92,18 +92,18 @@ abstract class SiteRepo {
     return resultList;
   }
 
-  static Future<List<SiteModel>> getSitesData(int companyId) async {
-    List<SiteModel> resultList = [];
+  static Future<List<RetailOutletModel>> getOutletData(int companyId) async {
+    List<RetailOutletModel> resultList = [];
     try {
       Map<String, dynamic> data = {
-        _dbTypeKey: _dbSiteTypeValue,
+        _dbTypeKey: _dbOutletTypeValue,
         "company_id": companyId
       };
       final result = await HttpService.post(_getCommonPath, data);
       if (result['success']) {
-        List<dynamic> siteData = result['data'];
-        for (var element in siteData) {
-          resultList.add(SiteModel.fromJson(element));
+        List<dynamic> outletData = result['data'];
+        for (var element in outletData) {
+          resultList.add(RetailOutletModel.fromJson(element));
         }
       } else {
         throw 'unauthorized';

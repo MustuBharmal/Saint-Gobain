@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:saint_gobain/presentation/site/list_of_sites_screen.dart';
 import '../../core/style/app_color.dart';
 import '../../core/style/styles.dart';
 import '../../widgets/general_widgets.dart';
 import '../auth/controller/auth_controller.dart';
+import '../retail_outlet/list_of_retail_outlet_screen.dart';
+import '../site/list_of_sites_screen.dart';
 import '../widgets/home_screen_dart.dart';
 import 'controller/home_controller.dart';
 
@@ -149,9 +150,9 @@ class HomePage extends GetView<HomePageController> {
                 HomeScreenCard(
                   color: Colors.orange,
                   imageFile: 'assets/images/to-do-list.png',
-                  label: "New Entry",
+                  label: "Retail Outlet List",
                   onTap: () {
-                    // Get.toNamed(AddCollegeScreen.routeName);
+                    Get.toNamed(ListOfRetailOutletScreen.routeName);
                   },
                 ),
                 HomeScreenCard(

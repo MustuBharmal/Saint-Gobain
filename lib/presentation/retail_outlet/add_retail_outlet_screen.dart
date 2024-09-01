@@ -5,14 +5,15 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
-import './controller/site_controller.dart';
+import '../site/model/common_model.dart';
+import './controller/retail_outlet_controller.dart';
 import 'model/common_model.dart';
-import 'model/site_model.dart';
+import 'model/retail_outlet_model.dart';
 
-class AddSiteScreen extends GetView<SitesController> {
-  AddSiteScreen({super.key});
+class AddRetailOutletScreen extends GetView<RetailOutletController> {
+  AddRetailOutletScreen({super.key});
 
-  static const routeName = '/add-site';
+  static const routeName = '/add-retail-outlet';
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -21,7 +22,7 @@ class AddSiteScreen extends GetView<SitesController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWidget(
-        title: Get.arguments != null ? "Edit Site" : "Add Site",
+        title: Get.arguments != null ? "Edit Retail Outlet" : "Add Retail Outlet",
         leading: const Icon(CupertinoIcons.arrow_left),
       ),
       body: Obx(
@@ -38,7 +39,7 @@ class AddSiteScreen extends GetView<SitesController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           myText(
-                              text: "Contractor Name",
+                              text: "Outlet name",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 18)),
                           SizedBox(
@@ -46,11 +47,10 @@ class AddSiteScreen extends GetView<SitesController> {
                           ),
                           myTextField(
                             text: "Name",
-                            controller: controller.contractorName.value,
+                            controller: controller.outletName.value,
                             validator: (String input) {
                               if (input.isEmpty) {
-                                Get.snackbar(
-                                    'Warning', 'Contractor name is required.',
+                                Get.snackbar('Warning', 'Name is required.',
                                     colorText: Colors.white,
                                     backgroundColor: Colors.blue);
                                 return '';
@@ -59,7 +59,47 @@ class AddSiteScreen extends GetView<SitesController> {
                             },
                           ),
                           myText(
-                              text: "Contractor Phone Number",
+                              text: "Outlet Address",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 18)),
+                          SizedBox(
+                            height: Get.height * dropSize,
+                          ),
+                          myTextField(
+                            text: "Address",
+                            controller: controller.outletAddress.value,
+                            validator: (String input) {
+                              if (input.isEmpty) {
+                                Get.snackbar('Warning', 'Address is required.',
+                                    colorText: Colors.white,
+                                    backgroundColor: Colors.blue);
+                                return '';
+                              }
+                              return null;
+                            },
+                          ),
+                          myText(
+                              text: "Outlet owner name",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 18)),
+                          SizedBox(
+                            height: Get.height * dropSize,
+                          ),
+                          myTextField(
+                            text: "Name",
+                            controller: controller.outletOwner.value,
+                            validator: (String input) {
+                              if (input.isEmpty) {
+                                Get.snackbar('Warning', 'Name is required.',
+                                    colorText: Colors.white,
+                                    backgroundColor: Colors.blue);
+                                return '';
+                              }
+                              return null;
+                            },
+                          ),
+                          myText(
+                              text: "Outlet phone number",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 18)),
                           SizedBox(
@@ -67,7 +107,7 @@ class AddSiteScreen extends GetView<SitesController> {
                           ),
                           myTextField(
                             text: "Phone Number",
-                            controller: controller.contractorPhone.value,
+                            controller: controller.outletPhone.value,
                             textInputType: TextInputType.phone,
                             maxLength: 10,
                             validator: (String input) {
@@ -82,47 +122,7 @@ class AddSiteScreen extends GetView<SitesController> {
                             },
                           ),
                           myText(
-                              text: "Contractor Address",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 18)),
-                          SizedBox(
-                            height: Get.height * dropSize,
-                          ),
-                          myTextField(
-                            text: "Address",
-                            controller: controller.contractorAddress.value,
-                            validator: (String input) {
-                              if (input.isEmpty) {
-                                Get.snackbar('Warning', 'Address is required.',
-                                    colorText: Colors.white,
-                                    backgroundColor: Colors.blue);
-                                return '';
-                              }
-                              return null;
-                            },
-                          ),
-                          myText(
-                              text: "Site Address",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 18)),
-                          SizedBox(
-                            height: Get.height * dropSize,
-                          ),
-                          myTextField(
-                            text: "Address",
-                            controller: controller.siteAddress.value,
-                            validator: (String input) {
-                              if (input.isEmpty) {
-                                Get.snackbar('Warning', 'Address is required.',
-                                    colorText: Colors.white,
-                                    backgroundColor: Colors.blue);
-                                return '';
-                              }
-                              return null;
-                            },
-                          ),
-                          myText(
-                              text: "Select Site City",
+                              text: "Select Outlet City",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 18)),
                           SizedBox(
@@ -179,77 +179,6 @@ class AddSiteScreen extends GetView<SitesController> {
                             height: Get.height * dropSize,
                           ),
                           myText(
-                              text: "Select Site Type",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 18)),
-                          SizedBox(
-                            height: Get.height * dropSize,
-                          ),
-                          DropdownButtonFormField<SiteTypeModel>(
-                            validator: (SiteTypeModel? input) {
-                              if (input?.siteTypeValue == null) {
-                                Get.snackbar('Warning', 'Select Site Type.',
-                                    colorText: Colors.white,
-                                    backgroundColor: Colors.blue);
-                                return '';
-                              }
-                              return null;
-                            },
-                            isExpanded: true,
-                            menuMaxHeight: 500,
-                            elevation: 16,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.black,
-                            ),
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.only(top: 5, left: 20),
-                              errorStyle: const TextStyle(fontSize: 0),
-                              hintStyle: TextStyle(
-                                color: AppColors.genderTextColor,
-                              ),
-                              hintText: ' -select- ',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            value: controller.typeOfSiteModifier.value,
-                            onChanged: controller.setSiteTypeValue,
-                            items: controller.typeOfSitesList
-                                .map<DropdownMenuItem<SiteTypeModel>>(
-                                    (SiteTypeModel value) {
-                              return DropdownMenuItem<SiteTypeModel>(
-                                value: value,
-                                child: Text(
-                                  value.siteTypeValue ?? '-',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xffA6A6A6),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                          SizedBox(
-                            height: Get.height * dropSize,
-                          ),
-                          myText(
-                              text: "Remarks",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400, fontSize: 18)),
-                          SizedBox(
-                            height: Get.height * dropSize,
-                          ),
-                          myTextField(
-                            text: "Remarks",
-                            controller: controller.remarks.value,
-                            validator: (String input) {
-                              return null;
-                            },
-                          ),
-                          myText(
                               text: "Giveaways",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w400, fontSize: 18)),
@@ -267,13 +196,13 @@ class AddSiteScreen extends GetView<SitesController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               myText(
-                                  text: "Add Painters",
+                                  text: "Add Customers",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w400,
                                       fontSize: 18)),
                               IconButton(
                                   onPressed: () {
-                                    controller.paintersList.add(Painters());
+                                    controller.customerList.add(Customers());
                                   },
                                   icon: const Icon(Icons.add))
                             ],
@@ -284,12 +213,12 @@ class AddSiteScreen extends GetView<SitesController> {
                           Wrap(
                             children: [
                               ...List.generate(
-                                controller.paintersList.length,
+                                controller.customerList.length,
                                 (index) => Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     myText(
-                                        text: "Painter Name",
+                                        text: "Customer name",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 18)),
@@ -299,18 +228,18 @@ class AddSiteScreen extends GetView<SitesController> {
                                     myTextQuesField(
                                         text: "Name",
                                         initialValue: controller
-                                            .paintersList.value[index].name,
+                                            .customerList.value[index].name,
                                         validator: (String input) {
                                           return null;
                                         },
                                         onChanged: (String? val) {
                                           if (val!.isNotEmpty) {
-                                            controller.paintersList.value[index]
+                                            controller.customerList.value[index]
                                                 .name = val;
                                           }
                                         }),
                                     myText(
-                                        text: "Painter Phone Number",
+                                        text: "Customer phone number",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 18)),
@@ -322,16 +251,82 @@ class AddSiteScreen extends GetView<SitesController> {
                                         textInputType: TextInputType.phone,
                                         maxLength: 10,
                                         initialValue: controller
-                                            .paintersList.value[index].phone,
+                                            .customerList.value[index].phone,
                                         validator: (String input) {
                                           return null;
                                         },
                                         onChanged: (String? val) {
                                           if (val!.isNotEmpty) {
-                                            controller.paintersList.value[index]
+                                            controller.customerList.value[index]
                                                 .phone = val;
                                           }
                                         }),
+                                    myText(
+                                        text: "Select customer type",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 18)),
+                                    SizedBox(
+                                      height: Get.height * dropSize,
+                                    ),
+                                    DropdownButtonFormField<String>(
+                                      validator: (String? input) {
+                                        if (input == null) {
+                                          Get.snackbar('Warning',
+                                              'Select customer type.',
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.blue);
+                                          return '';
+                                        }
+                                        return null;
+                                      },
+                                      isExpanded: true,
+                                      menuMaxHeight: 500,
+                                      elevation: 16,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: AppColors.black,
+                                      ),
+                                      decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            top: 5, left: 20),
+                                        errorStyle:
+                                            const TextStyle(fontSize: 0),
+                                        hintStyle: TextStyle(
+                                          color: AppColors.genderTextColor,
+                                        ),
+                                        hintText: ' -select- ',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                      value: controller
+                                          .customerList.value[index].type,
+                                      onChanged: (value) async {
+                                        if(value!.isNotEmpty){
+                                          controller.customerList.value[index].type = value;
+                                        }
+                                      },
+                                      items: controller.typeOfCustomerListSec
+                                          .map<DropdownMenuItem<String>>(
+                                              (Customers value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value.type,
+                                          child: Text(
+                                            value.type ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xffA6A6A6),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    SizedBox(
+                                      height: Get.height * dropSize,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -508,8 +503,8 @@ class AddSiteScreen extends GetView<SitesController> {
                                       width: Get.width * 0.5,
                                       child: elevatedButton(
                                         text: Get.arguments != null
-                                            ? "Edit Site"
-                                            : "Add Site",
+                                            ? "Edit Retail Outlet"
+                                            : "Add Retail Outlet",
                                         onPress: () {
                                           // controller.uploadImage();
                                           // return;
@@ -520,8 +515,8 @@ class AddSiteScreen extends GetView<SitesController> {
                                             return;
                                           }*/
                                           Get.arguments != null
-                                              ? controller.updateSite()
-                                              : controller.insertSite();
+                                              ? controller.updateOutlet()
+                                              : controller.insertOutlet();
                                         },
                                       ),
                                     ),

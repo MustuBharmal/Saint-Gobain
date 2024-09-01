@@ -84,7 +84,7 @@ Widget myTextQuesField({
       decoration: InputDecoration(
         counterText: '',
         labelText: text,
-        contentPadding: const EdgeInsets.only(top: 7, left: 20),
+        contentPadding: const EdgeInsets.only(top: 5, left: 20),
         errorStyle: const TextStyle(fontSize: 0),
         hintStyle: TextStyle(
           color: AppColors.genderTextColor,
@@ -93,281 +93,27 @@ Widget myTextQuesField({
         prefixIcon: prefixIcon == null
             ? null
             : Image.asset(
-                prefixIcon,
-                cacheHeight: 20,
-              ),
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-        errorBorder: InputBorder.none,
-        // disabledBorder: InputBorder.none,
+          prefixIcon,
+          cacheHeight: 20,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     ),
   );
 }
-/*Widget cardBrandingWidget(BrandingModel branding) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16),
-    child: Container(
-      width: Get.width,
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-          color: AppColors.shadow,
-          blurRadius: 10,
-          spreadRadius: 0.1,
-          offset: Offset(0, 10),
-        )
-      ], color: AppColors.white, borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(bottom: 25, top: 10, right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                branding.productName!.toUpperCase(),
-                overflow: TextOverflow.clip,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
-                    Get.toNamed(AddBrandingScreen.routeName,
-                        arguments: branding);
-                  },
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                    // size: 35,
-                  ),
-                ),
-              ),
-              // Obx(
-              //       () => Container(
-              //     alignment: Alignment.topRight,
-              //     child: CustomerController.instance.isEditLoading.value
-              //         ? const CircularProgressIndicator()
-              //         : IconButton(
-              //       onPressed: () {
-              //         CustomerController.instance
-              //             .deleteCustomer(customer);
-              //       },
-              //       icon: const Icon(
-              //         Icons.delete,
-              //         color: Colors.blue,
-              //         // size: 35,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: ('Branding:- '),
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextSpan(
-                  text: (branding.productName),
-                  style: TextStyle(
-                    overflow: TextOverflow.fade,
-                    color: AppColors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: ('Number of quantity:- '),
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: (branding.quantity.toString()),
-                      style: TextStyle(
-                        overflow: TextOverflow.fade,
-                        color: AppColors.grey,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              if (branding.imagePath != null)
-                CircleAvatar(
-                  foregroundImage: NetworkImage(branding.imagePath!),
-                ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}*/
-
-/*Widget cardProductWidget(ProductModel product) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 16),
-    child: Container(
-      width: Get.width,
-      decoration: BoxDecoration(boxShadow: const [
-        BoxShadow(
-          color: AppColors.shadow,
-          blurRadius: 10,
-          spreadRadius: 0.1,
-          offset: Offset(0, 10),
-        )
-      ], color: AppColors.white, borderRadius: BorderRadius.circular(10)),
-      padding: const EdgeInsets.only(bottom: 25, top: 10, right: 20, left: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Text(
-                  product.productName!,
-                  overflow: TextOverflow.clip,
-                  softWrap: true,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
-                    Get.toNamed(AddProductScreen.routeName, arguments: product);
-                  },
-                  icon: const Icon(
-                    Icons.edit,
-                    color: Colors.blue,
-                    // size: 35,
-                  ),
-                ),
-              ),
-              // Obx(
-              //       () => Container(
-              //     alignment: Alignment.topRight,
-              //     child: CustomerController.instance.isEditLoading.value
-              //         ? const CircularProgressIndicator()
-              //         : IconButton(
-              //       onPressed: () {
-              //         CustomerController.instance
-              //             .deleteCustomer(customer);
-              //       },
-              //       icon: const Icon(
-              //         Icons.delete,
-              //         color: Colors.blue,
-              //         // size: 35,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: ('Product:- '),
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextSpan(
-                  text: (product.productName),
-                  style: TextStyle(
-                    overflow: TextOverflow.fade,
-                    color: AppColors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: ('Number of quantity:- '),
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextSpan(
-                  text: (product.quantity.toString()),
-                  style: TextStyle(
-                    overflow: TextOverflow.fade,
-                    color: AppColors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}*/
 
 Widget iconTitleContainer(
     {text,
-      String? prefixIcon,
-      Function? onPress,
-      bool isReadOnly = false,
-      TextInputType textInputType = TextInputType.text,
-      TextEditingController? controller,
-      Function? validator,
-      double width = 150,
-      double height = 40}) {
+    String? prefixIcon,
+    Function? onPress,
+    bool isReadOnly = false,
+    TextInputType textInputType = TextInputType.text,
+    TextEditingController? controller,
+    Function? validator,
+    double width = 150,
+    double height = 40}) {
   return Container(
     margin: EdgeInsets.only(bottom: Get.height * 0.02),
     child: TextFormField(
@@ -388,9 +134,9 @@ Widget iconTitleContainer(
         prefixIcon: prefixIcon == null
             ? null
             : Image.asset(
-          prefixIcon,
-          cacheHeight: 20,
-        ),
+                prefixIcon,
+                cacheHeight: 20,
+              ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
