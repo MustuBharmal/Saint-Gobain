@@ -85,7 +85,7 @@ class SitesController extends GetxController {
         dbType: "insertSite",
         companyId: AuthController.instance.user?.companyId,
         contractorName: contractorName.value.text,
-        contractorPhone: int.parse(contractorPhone.value.text),
+        contractorPhone: (contractorPhone.value.text),
         contractorAddress: contractorAddress.value.text,
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
@@ -116,7 +116,7 @@ class SitesController extends GetxController {
       Get.offAllNamed(HomePage.routeName);
       HomePageController.instance.lengthOfListOfSites.value =
           HomePageController.instance.lengthOfListOfSites.value + 1;
-      Get.snackbar('Congrats!', 'College is inserted.',
+      Get.snackbar('Congrats!', 'Site is inserted.',
           backgroundColor: AppColors.blue, colorText: AppColors.white);
     } catch (e) {
       isLoading(false);
@@ -137,7 +137,7 @@ class SitesController extends GetxController {
         companyId: AuthController.instance.user?.companyId,
         contractorName: contractorName.value.text,
         contractorAddress: contractorAddress.value.text,
-        contractorPhone: int.parse(contractorPhone.value.text),
+        contractorPhone: (contractorPhone.value.text),
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
         siteType: typeOfSiteModifier.value?.siteTypeValue,

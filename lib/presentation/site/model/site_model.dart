@@ -4,7 +4,7 @@ class SiteModel {
   String? dbType;
   int? siteId;
   String? contractorName;
-  int? contractorPhone;
+  String? contractorPhone;
   String? contractorAddress;
   int? siteCityId;
   String? siteAddress;
@@ -45,7 +45,7 @@ class SiteModel {
   factory SiteModel.fromJson(Map<String, dynamic> json) {
     int? siteId = json['site_id'];
     String? contractorName = json['contractor_name'] ?? '';
-    int? contractorPhone = json['contractor_phone'] ?? 0;
+    String? contractorPhone = json['contractor_phone'] ?? 0;
     String? contractorAddress = json['contractor_address'] ?? '';
     int? siteCityId = json['site_city_id'];
     String? siteAddress = json['site_address'] ?? '';

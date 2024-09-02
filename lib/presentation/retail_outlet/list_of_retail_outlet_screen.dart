@@ -22,7 +22,7 @@ class ListOfRetailOutletScreen extends GetView<RetailOutletController> {
     outlets = HomePageController.instance.listOfRetailOutlets.value;
     return Scaffold(
       appBar: appBarWidget(
-        title: ('List of Colleges'),
+        title: ('List of Retail Outlets'),
         actions: [
           IconButton(
             onPressed: () {
@@ -69,7 +69,7 @@ class ListOfRetailOutletScreen extends GetView<RetailOutletController> {
                             MaterialStateProperty.all(AppColors.white),
                         // textInputAction: TextInputAction.done,
                         leading: const Icon(Icons.search),
-                        hintText: 'Search Sites',
+                        hintText: 'Search Retail Outlet',
                         onChanged: HomePageController.instance.searchColleges,
                       ),
                     ),

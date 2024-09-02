@@ -22,7 +22,7 @@ class ListOfSitesScreen extends GetView<SitesController> {
     sites = HomePageController.instance.listOfSites.value;
     return Scaffold(
       appBar: appBarWidget(
-        title: ('List of Colleges'),
+        title: ('List of Sites'),
         actions: [
           IconButton(
             onPressed: () {

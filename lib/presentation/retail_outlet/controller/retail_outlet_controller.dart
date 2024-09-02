@@ -87,7 +87,7 @@ class RetailOutletController extends GetxController {
         outletAddress: outletAddress.value.text,
         outletCityId: cityModifier.value?.cityId ?? 1,
         outletOwner: outletOwner.value.text,
-        outletPhone: int.parse(outletPhone.value.text),
+        outletPhone: (outletPhone.value.text),
         // mapLink: ,
         giveaways: giveaways.value.text,
         companyId: AuthController.instance.user?.companyId,
@@ -115,7 +115,7 @@ class RetailOutletController extends GetxController {
       Get.offAllNamed(HomePage.routeName);
       HomePageController.instance.lengthOfListOfSites.value =
           HomePageController.instance.lengthOfListOfSites.value + 1;
-      Get.snackbar('Congrats!', 'College is inserted.',
+      Get.snackbar('Congrats!', 'Retail Outlet is inserted.',
           backgroundColor: AppColors.blue, colorText: AppColors.white);
     } catch (e) {
       isLoading(false);
@@ -138,7 +138,7 @@ class RetailOutletController extends GetxController {
         outletAddress: outletAddress.value.text,
         outletCityId: cityModifier.value?.cityId ?? 1,
         outletOwner: outletOwner.value.text,
-        outletPhone: int.parse(outletPhone.value.text),
+        outletPhone: (outletPhone.value.text),
         // mapLink: ,
         giveaways: giveaways.value.text,
         customers: customerList,
@@ -164,7 +164,7 @@ class RetailOutletController extends GetxController {
       LogUtil.debug(outlet?.toJson());
       HomePageController.instance.listOfRetailOutlets.add(outlet!);
       isLoading(false);
-      Dialogs.showSnackBar(Get.context, "Site updated");
+      Dialogs.showSnackBar(Get.context, "Retail outlet updated");
 
       Get.back();
     } catch (e) {

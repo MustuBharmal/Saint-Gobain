@@ -7,7 +7,7 @@ class RetailOutletModel {
   String? outletAddress;
   int? outletCityId;
   String? outletOwner;
-  int? outletPhone;
+  String? outletPhone;
   String? mapLink;
   String? giveaways;
   List<Customers>? customers;
@@ -44,7 +44,7 @@ class RetailOutletModel {
     String? outletAddress = json['outlet_address'];
     int? outletCityId = json['outlet_city_id'];
     String? outletOwner = json['outlet_owner'];
-    int? outletPhone = json['outlet_phone'];
+    String? outletPhone = json['outlet_phone'];
     String? mapLink = json['map_link'];
     String? giveaways = json['give_aways'];
     List<Customers>? listOfCustomers = [];
