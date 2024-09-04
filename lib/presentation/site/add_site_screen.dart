@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
+import '../widgets/add_item_button.dart';
+import '../widgets/painters_adding_widget.dart';
 import './controller/site_controller.dart';
 import 'model/common_model.dart';
 import 'model/site_model.dart';
@@ -263,80 +265,31 @@ class AddSiteScreen extends GetView<SitesController> {
                               return null;
                             },
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              myText(
-                                  text: "Add Painters",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18)),
-                              IconButton(
-                                  onPressed: () {
-                                    controller.paintersList.add(Painters());
-                                  },
-                                  icon: const Icon(Icons.add))
-                            ],
-                          ),
+                          if (Get.arguments == null)
+                            AddItemButton(
+                              onTapFun: () {
+                                controller.selectedPaintersList.add(Painters());
+                              },
+                              buttonText: 'Add Painters',
+                            )
+                          else
+                            AddItemButton(
+                              onTapFun: () {
+                                controller.uploadedPaintersList.add(Painters());
+                              },
+                              buttonText: 'Add Painters',
+                            ),
                           SizedBox(
                             height: Get.height * dropSize,
                           ),
-                          Wrap(
-                            children: [
-                              ...List.generate(
-                                controller.paintersList.length,
-                                (index) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    myText(
-                                        text: "Painter Name",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18)),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                    myTextQuesField(
-                                        text: "Name",
-                                        initialValue: controller
-                                            .paintersList.value[index].name,
-                                        validator: (String input) {
-                                          return null;
-                                        },
-                                        onChanged: (String? val) {
-                                          if (val!.isNotEmpty) {
-                                            controller.paintersList.value[index]
-                                                .name = val;
-                                          }
-                                        }),
-                                    myText(
-                                        text: "Painter Phone Number",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18)),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                    myTextQuesField(
-                                        text: "Phone Number",
-                                        textInputType: TextInputType.phone,
-                                        maxLength: 10,
-                                        initialValue: controller
-                                            .paintersList.value[index].phone,
-                                        validator: (String input) {
-                                          return null;
-                                        },
-                                        onChanged: (String? val) {
-                                          if (val!.isNotEmpty) {
-                                            controller.paintersList.value[index]
-                                                .phone = val;
-                                          }
-                                        }),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          if (Get.arguments == null)
+                            PaintersAddingWidget(
+                              paintersList: controller.selectedPaintersList.value,
+                            )
+                          else
+                            PaintersAddingWidget(
+                              paintersList: controller.uploadedPaintersList.value,
+                            ),
                           if (Get.arguments == null)
                             Wrap(
                               children: [

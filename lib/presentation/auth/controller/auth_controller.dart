@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import '../../../core/util/log_util.dart';
 import '../../../core/util/storage_util.dart';
 import '../../home/home_page.dart';
 import '../auth_screen.dart';

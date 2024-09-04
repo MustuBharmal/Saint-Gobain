@@ -6,8 +6,9 @@ import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
 import '../site/model/common_model.dart';
+import '../widgets/add_item_button.dart';
+import '../widgets/customers_adding_widget.dart';
 import './controller/retail_outlet_controller.dart';
-import 'model/common_model.dart';
 import 'model/retail_outlet_model.dart';
 
 class AddRetailOutletScreen extends GetView<RetailOutletController> {
@@ -22,7 +23,8 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWidget(
-        title: Get.arguments != null ? "Edit Retail Outlet" : "Add Retail Outlet",
+        title:
+            Get.arguments != null ? "Edit Retail Outlet" : "Add Retail Outlet",
         leading: const Icon(CupertinoIcons.arrow_left),
       ),
       body: Obx(
@@ -192,146 +194,39 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                               return null;
                             },
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              myText(
-                                  text: "Add Customers",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18)),
-                              IconButton(
-                                  onPressed: () {
-                                    controller.customerList.add(Customers());
-                                  },
-                                  icon: const Icon(Icons.add))
-                            ],
-                          ),
+                          if (Get.arguments == null)
+                            AddItemButton(
+                              onTapFun: () {
+                                controller.selectedCustomerList
+                                    .add(Customers());
+                              },
+                              buttonText: 'Add Customers',
+                            )
+                          else
+                            AddItemButton(
+                              onTapFun: () {
+                                controller.uploadedCustomerList
+                                    .add(Customers());
+                              },
+                              buttonText: 'Add Customers',
+                            ),
                           SizedBox(
                             height: Get.height * dropSize,
                           ),
-                          Wrap(
-                            children: [
-                              ...List.generate(
-                                controller.customerList.length,
-                                (index) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    myText(
-                                        text: "Customer name",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18)),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                    myTextQuesField(
-                                        text: "Name",
-                                        initialValue: controller
-                                            .customerList.value[index].name,
-                                        validator: (String input) {
-                                          return null;
-                                        },
-                                        onChanged: (String? val) {
-                                          if (val!.isNotEmpty) {
-                                            controller.customerList.value[index]
-                                                .name = val;
-                                          }
-                                        }),
-                                    myText(
-                                        text: "Customer phone number",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18)),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                    myTextQuesField(
-                                        text: "Phone Number",
-                                        textInputType: TextInputType.phone,
-                                        maxLength: 10,
-                                        initialValue: controller
-                                            .customerList.value[index].phone,
-                                        validator: (String input) {
-                                          return null;
-                                        },
-                                        onChanged: (String? val) {
-                                          if (val!.isNotEmpty) {
-                                            controller.customerList.value[index]
-                                                .phone = val;
-                                          }
-                                        }),
-                                    myText(
-                                        text: "Select customer type",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18)),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                    DropdownButtonFormField<String>(
-                                      validator: (String? input) {
-                                        if (input == null) {
-                                          Get.snackbar('Warning',
-                                              'Select customer type.',
-                                              colorText: Colors.white,
-                                              backgroundColor: Colors.blue);
-                                          return '';
-                                        }
-                                        return null;
-                                      },
-                                      isExpanded: true,
-                                      menuMaxHeight: 500,
-                                      elevation: 16,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color: AppColors.black,
-                                      ),
-                                      decoration: InputDecoration(
-                                        contentPadding: const EdgeInsets.only(
-                                            top: 5, left: 20),
-                                        errorStyle:
-                                            const TextStyle(fontSize: 0),
-                                        hintStyle: TextStyle(
-                                          color: AppColors.genderTextColor,
-                                        ),
-                                        hintText: ' -select- ',
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                      value: controller
-                                          .customerList.value[index].type,
-                                      onChanged: (value) async {
-                                        if(value!.isNotEmpty){
-                                          controller.customerList.value[index].type = value;
-                                        }
-                                      },
-                                      items: controller.typeOfCustomerListSec
-                                          .map<DropdownMenuItem<String>>(
-                                              (Customers value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value.type,
-                                          child: Text(
-                                            value.type ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              color: Color(0xffA6A6A6),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    SizedBox(
-                                      height: Get.height * dropSize,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          if (Get.arguments == null)
+                            CustomersAddingWidget(
+                              uploadedCustomerList:
+                                  controller.selectedCustomerList.value,
+                              typeOfCustomList:
+                                  controller.typeOfCustomerListSec,
+                            )
+                          else
+                            CustomersAddingWidget(
+                              uploadedCustomerList:
+                              controller.uploadedCustomerList.value,
+                              typeOfCustomList:
+                              controller.typeOfCustomerListSec,
+                            ),
                           if (Get.arguments == null)
                             Wrap(
                               children: [

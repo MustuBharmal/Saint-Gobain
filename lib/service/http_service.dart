@@ -18,7 +18,7 @@ class HttpService {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW4iLCJleHAiOjE3MDcxMTM4MDd9.81c8uR-Vl_kZkCCPZBKT5uJ_lQe8L0zoad_WVsAES2M'
   });
 
-  static const String _baseUrl = 'http://rajwin.dyndns.org:8092/scriptcase/app/SaintGobain';
+  static const String _baseUrl = 'http://sg.jagransolutionsapp.com';
 
   HttpService.initialize() {
     _dio = dio.Dio(_baseOptions);

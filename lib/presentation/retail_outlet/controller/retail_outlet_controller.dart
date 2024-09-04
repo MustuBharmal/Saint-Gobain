@@ -21,7 +21,8 @@ class RetailOutletController extends GetxController {
   Rx<TextEditingController> outletOwner = TextEditingController().obs;
   Rx<TextEditingController> outletPhone = TextEditingController().obs;
   Rx<TextEditingController> giveaways = TextEditingController().obs;
-  RxList<Customers> customerList = RxList.empty();
+  RxList<Customers> selectedCustomerList = RxList.empty();
+  RxList<Customers> uploadedCustomerList = RxList.empty();
   RxList<CityModel> citiesList = RxList.empty();
   RxList<CustomerTypeModel> typeOfCustomerList = RxList.empty();
   RxList<Customers> typeOfCustomerListSec = RxList.empty();
@@ -36,6 +37,7 @@ class RetailOutletController extends GetxController {
   RxList<ImageModel> uploadedImages = RxList.empty();
   List<int> deletedId = [];
   List<ImageModel> imageList = [];
+  List<Customers> customersList = [];
   List<ImageModel> deletedImageList = RxList.empty();
 
   static RetailOutletController get instance =>
@@ -57,7 +59,7 @@ class RetailOutletController extends GetxController {
     giveaways.value.text = '';
     cityModifier.value = null;
     typeOfCustomerModifier.value = null;
-    customerList.value = [];
+    selectedCustomerList.value = [];
   }
 
   @override
@@ -91,14 +93,13 @@ class RetailOutletController extends GetxController {
         // mapLink: ,
         giveaways: giveaways.value.text,
         companyId: AuthController.instance.user?.companyId,
-        customers: customerList,
+        customers: selectedCustomerList,
         createdBy: AuthController.instance.user!.name ?? "admin",
         createdAt: DateTime.now().toString(),
         updatedBy: '',
         updatedAt: '',
         cityName: cityModifier.value?.cityName,
       );
-      LogUtil.debug(outlet?.toJson());
       outlet?.outletId = await RetailOutletRepo.insertOutlet(outlet!);
       if (outlet?.outletId != null) {
         for (int i = 0; i < selectedImages.length; i++) {
@@ -130,6 +131,9 @@ class RetailOutletController extends GetxController {
       for (int i = 0; i < uploadedImages.length; i++) {
         imageList.add(uploadedImages[i]);
       }
+      for (int i = 0; i < uploadedCustomerList.length; i++) {
+        customersList.add(uploadedCustomerList[i]);
+      }
       outlet = RetailOutletModel(
         dbType: "updateOutlet",
         outletId: outlet!.outletId,
@@ -141,7 +145,7 @@ class RetailOutletController extends GetxController {
         outletPhone: (outletPhone.value.text),
         // mapLink: ,
         giveaways: giveaways.value.text,
-        customers: customerList,
+        customers: uploadedCustomerList,
         createdBy: outlet?.createdBy ?? "admin",
         createdAt: outlet?.createdAt ?? DateTime.now().toString(),
         updatedBy: AuthController.instance.user!.name ?? "admin",
@@ -153,6 +157,9 @@ class RetailOutletController extends GetxController {
         HomePageController.instance.listOfRetailOutlets
             .removeWhere((col) => col.outletId == outlet!.outletId);
       });
+      for (int i = 0; i < selectedCustomerList.length; i++) {
+        customersList.add(selectedCustomerList[i]);
+      }
       for (int i = 0; i < selectedImages.length; i++) {
         String imageUrl = await uploadImage(
             outlet!.outletId!, 'site', Utility.base64String(selectedImages[i]));
@@ -160,6 +167,7 @@ class RetailOutletController extends GetxController {
             ImageModel(imageId: i, path: imageUrl, siteId: outlet!.outletId);
         imageList.add(dummy);
       }
+      outlet?.customers = customersList;
       outlet?.images = imageList;
       LogUtil.debug(outlet?.toJson());
       HomePageController.instance.listOfRetailOutlets.add(outlet!);
@@ -187,7 +195,8 @@ class RetailOutletController extends GetxController {
             (element) => element.cityName == outlet!.cityName);
         setCityValue(cityModifier.value);
         setSiteTypeValue(typeOfCustomerModifier.value?.siteTypeValue);
-        customerList.clear();
+        selectedCustomerList.clear();
+        uploadedCustomerList.clear();
         selectedImages.clear();
         uploadedImages.clear();
         deletedId.clear();
@@ -199,7 +208,7 @@ class RetailOutletController extends GetxController {
         }
         if (outlet!.customers!.isNotEmpty) {
           for (int i = 0; i < outlet!.customers!.length; i++) {
-            customerList.add(outlet!.customers![i]);
+            uploadedCustomerList.add(outlet!.customers![i]);
           }
         }
 
@@ -221,7 +230,7 @@ class RetailOutletController extends GetxController {
     typeOfCustomerList.clear();
     typeOfCustomerList
         .addAll(await RetailOutletRepo.getTypeOfCustomerTypeData());
-    for(var e in typeOfCustomerList.value){
+    for (var e in typeOfCustomerList) {
       typeOfCustomerListSec.add(Customers(type: e.siteTypeValue));
     }
   }

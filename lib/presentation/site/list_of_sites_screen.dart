@@ -27,6 +27,7 @@ class ListOfSitesScreen extends GetView<SitesController> {
           IconButton(
             onPressed: () {
               controller.selectedImages.clear();
+              controller.selectedPaintersList.clear();
               Get.toNamed(AddSiteScreen.routeName);
             },
             icon: const Padding(
@@ -45,6 +46,7 @@ class ListOfSitesScreen extends GetView<SitesController> {
         child: FloatingActionButton(
           onPressed: () {
             controller.selectedImages.clear();
+            controller.selectedPaintersList.clear();
             Get.toNamed(AddSiteScreen.routeName);
           },
           backgroundColor: AppColors.white2,

@@ -1,7 +1,7 @@
-import 'package:saint_gobain/presentation/retail_outlet/model/retail_outlet_model.dart';
 
 import '../../../core/util/log_util.dart';
 import '../../../core/util/storage_util.dart';
+import '../../retail_outlet/model/retail_outlet_model.dart';
 import '../../site/model/common_model.dart';
 import '../../site/model/site_model.dart';
 import '/../../../service/http_service.dart';
@@ -17,7 +17,6 @@ abstract class HomePageRepo {
   static const String _dbCityTypeValue = 'getCities';
   static const String _getCommonPath = '/api_select/index.php';
   static const String _allOutletTypeValue = 'getOutlets';
-  static const String _questionsListTypeValue = 'getQuestions';
 
   static Future<List<CityModel>> getCitesData() async {
     List<CityModel> resultList = [];
