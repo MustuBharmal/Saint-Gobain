@@ -19,7 +19,7 @@ class ListOfSitesScreen extends GetView<SitesController> {
   @override
   Widget build(BuildContext context) {
     List<SiteModel> sites = [];
-    sites = HomePageController.instance.listOfSites.value;
+    sites = HomePageController.instance.listOfSites;
     return Scaffold(
       appBar: appBarWidget(
         title: ('List of Sites'),

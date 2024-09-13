@@ -16,6 +16,9 @@ class RetailOutletModel {
   String? updatedBy;
   String? updatedAt;
   int? companyId;
+  String? lat;
+  String? long;
+  String? geoLocation;
   String? cityName;
   List<ImageModel>? images;
 
@@ -35,6 +38,9 @@ class RetailOutletModel {
       this.updatedBy,
       this.updatedAt,
       this.companyId,
+      this.lat,
+      this.long,
+      this.geoLocation,
       this.cityName,
       this.images});
 
@@ -57,6 +63,9 @@ class RetailOutletModel {
     String? updatedBy = json['updated_by'];
     String? updatedAt = json['updated_at'];
     int? companyId = json['company_id'];
+    String? lat = json['latitude'];
+    String? long = json['longitude'];
+    String? geoLocation = json['geolocation'];
     String? cityName = json['city_name'];
     List<ImageModel>? listOfImages = [];
     List<dynamic> images = json['images'];
@@ -78,6 +87,9 @@ class RetailOutletModel {
       updatedBy: updatedBy,
       updatedAt: updatedAt,
       companyId: companyId,
+      lat: lat,
+      long: long,
+      geoLocation: geoLocation,
       cityName: cityName,
       images: listOfImages,
     );
@@ -103,6 +115,9 @@ class RetailOutletModel {
     data['updated_by'] = updatedBy;
     data['updated_at'] = updatedAt;
     data['company_id'] = companyId;
+    data['latitude'] = lat;
+    data['longitude'] = long;
+    data['geolocation'] = geoLocation;
     data['city_name'] = cityName;
     return data;
   }
@@ -132,6 +147,9 @@ class RetailOutletModel {
     data['updated_by'] = updatedBy;
     data['updated_at'] = updatedAt;
     data['company_id'] = companyId;
+    data['latitude'] = lat;
+    data['longitude'] = long;
+    data['geolocation'] = geoLocation;
     data['city_name'] = cityName;
     return data;
   }

@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/constant/dialogs.dart';
@@ -20,6 +22,7 @@ class RetailOutletController extends GetxController {
   Rx<TextEditingController> outletAddress = TextEditingController().obs;
   Rx<TextEditingController> outletOwner = TextEditingController().obs;
   Rx<TextEditingController> outletPhone = TextEditingController().obs;
+  Rx<TextEditingController> geoLocation = TextEditingController().obs;
   Rx<TextEditingController> giveaways = TextEditingController().obs;
   RxList<Customers> selectedCustomerList = RxList.empty();
   RxList<Customers> uploadedCustomerList = RxList.empty();
@@ -30,6 +33,7 @@ class RetailOutletController extends GetxController {
   RetailOutletModel? outlet;
   var isLoading = false.obs;
   var isEditLoading = false.obs;
+  var isLocationFetched = false.obs;
   Rx<CityModel?> cityModifier = Rx(null);
   Rx<CustomerTypeModel?> typeOfCustomerModifier = Rx(null);
   Rx<RetailOutletModel?> retailOutletModifier = Rx(null);
@@ -39,6 +43,7 @@ class RetailOutletController extends GetxController {
   List<ImageModel> imageList = [];
   List<Customers> customersList = [];
   List<ImageModel> deletedImageList = RxList.empty();
+  final Rxn<Position?> currentPosition = Rxn<Position>(null);
 
   static RetailOutletController get instance =>
       Get.find<RetailOutletController>();
@@ -56,10 +61,12 @@ class RetailOutletController extends GetxController {
     outletPhone.value.text = '';
     outletAddress.value.text = '';
     outletOwner.value.text = '';
+    geoLocation.value.text = '';
     giveaways.value.text = '';
     cityModifier.value = null;
     typeOfCustomerModifier.value = null;
     selectedCustomerList.value = [];
+    getCurrentPosition();
   }
 
   @override
@@ -70,6 +77,7 @@ class RetailOutletController extends GetxController {
     outletPhone.value.dispose();
     outletAddress.value.dispose();
     outletOwner.value.dispose();
+    geoLocation.value.dispose();
     giveaways.value.dispose();
   }
 
@@ -94,6 +102,9 @@ class RetailOutletController extends GetxController {
         giveaways: giveaways.value.text,
         companyId: AuthController.instance.user?.companyId,
         customers: selectedCustomerList,
+        geoLocation: geoLocation.value.text,
+        lat: currentPosition.value?.latitude.toString(),
+        long: currentPosition.value?.longitude.toString(),
         createdBy: AuthController.instance.user!.name ?? "admin",
         createdAt: DateTime.now().toString(),
         updatedBy: '',
@@ -103,7 +114,7 @@ class RetailOutletController extends GetxController {
       outlet?.outletId = await RetailOutletRepo.insertOutlet(outlet!);
       if (outlet?.outletId != null) {
         for (int i = 0; i < selectedImages.length; i++) {
-          String imageUrl = await uploadImage(outlet!.outletId!, 'site',
+          String imageUrl = await uploadImage(outlet!.outletId!, 'outlet',
               Utility.base64String(selectedImages[i]));
           dummy =
               ImageModel(imageId: i, path: imageUrl, siteId: outlet!.outletId);
@@ -146,6 +157,9 @@ class RetailOutletController extends GetxController {
         // mapLink: ,
         giveaways: giveaways.value.text,
         customers: uploadedCustomerList,
+        geoLocation: geoLocation.value.text,
+        lat: currentPosition.value?.latitude.toString(),
+        long: currentPosition.value?.longitude.toString(),
         createdBy: outlet?.createdBy ?? "admin",
         createdAt: outlet?.createdAt ?? DateTime.now().toString(),
         updatedBy: AuthController.instance.user!.name ?? "admin",
@@ -162,7 +176,7 @@ class RetailOutletController extends GetxController {
       }
       for (int i = 0; i < selectedImages.length; i++) {
         String imageUrl = await uploadImage(
-            outlet!.outletId!, 'site', Utility.base64String(selectedImages[i]));
+            outlet!.outletId!, 'outlet', Utility.base64String(selectedImages[i]));
         dummy =
             ImageModel(imageId: i, path: imageUrl, siteId: outlet!.outletId);
         imageList.add(dummy);
@@ -184,6 +198,7 @@ class RetailOutletController extends GetxController {
   void editSite() async {
     isEditLoading(true);
     outlet = Get.arguments;
+    LogUtil.debug(outlet?.toJson());
     try {
       if (outlet != null) {
         outletName.value.text = outlet!.outletName ?? '';
@@ -191,6 +206,7 @@ class RetailOutletController extends GetxController {
         outletOwner.value.text = outlet!.outletOwner ?? '';
         outletPhone.value.text = outlet!.outletPhone.toString();
         giveaways.value.text = outlet!.giveaways ?? '';
+        geoLocation.value.text = outlet!.geoLocation ?? '';
         cityModifier.value = citiesList.firstWhereOrNull(
             (element) => element.cityName == outlet!.cityName);
         setCityValue(cityModifier.value);
@@ -272,5 +288,62 @@ class RetailOutletController extends GetxController {
     LogUtil.debug(deletedImageList.length);
     deletedId.add(index);
     uploadedImages.removeAt(index);
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            currentPosition.value!.latitude, currentPosition.value!.longitude)
+        .then((List<Placemark> placeMark) {
+      Placemark place = placeMark[0];
+      geoLocation.value.text =
+          '${place.street}, ${place.subLocality}, ${place.locality!}, ${place.postalCode}';
+      LogUtil.debug(geoLocation.value.text);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Dialogs.showSnackBar(Get.context,
+          'Location services are disabled. Please enable the services');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Dialogs.showSnackBar(Get.context, 'Location permissions are denied');
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      Dialogs.showSnackBar(Get.context,
+          'Location permissions are permanently denied, we cannot request permissions.');
+      isLoading(false);
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> getCurrentPosition() async {
+    isLocationFetched.value = true;
+    LogUtil.debug(isLocationFetched.value);
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.high, distanceFilter: 100))
+        .then((Position position) {
+      currentPosition.value = position;
+      LogUtil.debug(currentPosition.value);
+      _getAddressFromLatLng(currentPosition.value!);
+      isLocationFetched.value = false;
+    }).catchError((e) {
+      debugPrint(e);
+      isLocationFetched.value = false;
+    });
   }
 }

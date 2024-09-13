@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/constant/dialogs.dart';
@@ -20,6 +22,7 @@ class SitesController extends GetxController {
   Rx<TextEditingController> siteAddress = TextEditingController().obs;
   Rx<TextEditingController> contractorAddress = TextEditingController().obs;
   Rx<TextEditingController> remarks = TextEditingController().obs;
+  Rx<TextEditingController> geoLocation = TextEditingController().obs;
   Rx<TextEditingController> giveaways = TextEditingController().obs;
   RxList<CityModel> citiesList = RxList.empty();
   RxList<SiteTypeModel> typeOfSitesList = RxList.empty();
@@ -29,6 +32,7 @@ class SitesController extends GetxController {
   SiteModel? site;
   var isLoading = false.obs;
   var isEditLoading = false.obs;
+  var isLocationFetched = false.obs;
   Rx<CityModel?> cityModifier = Rx(null);
   Rx<SiteTypeModel?> typeOfSiteModifier = Rx(null);
   Rx<SiteModel?> siteModifier = Rx(null);
@@ -38,6 +42,7 @@ class SitesController extends GetxController {
   List<ImageModel> imageList = [];
   List<Painters> paintersList = [];
   List<ImageModel> deletedImageList = RxList.empty();
+  final Rxn<Position?> currentPosition = Rxn<Position>(null);
 
   static SitesController get instance => Get.find<SitesController>();
 
@@ -55,9 +60,12 @@ class SitesController extends GetxController {
     contractorAddress.value.text = '';
     siteAddress.value.text = '';
     remarks.value.text = '';
+    geoLocation.value.text = '';
     giveaways.value.text = '';
     cityModifier.value = null;
     typeOfSiteModifier.value = null;
+    getCurrentPosition();
+    LogUtil.debug('running');
   }
 
   @override
@@ -69,6 +77,7 @@ class SitesController extends GetxController {
     contractorAddress.value.dispose();
     siteAddress.value.dispose();
     remarks.value.dispose();
+    geoLocation.value.dispose();
     giveaways.value.dispose();
   }
 
@@ -93,6 +102,9 @@ class SitesController extends GetxController {
         siteType: typeOfSiteModifier.value?.siteTypeValue,
         // mapLink: ,
         remarks: remarks.value.text,
+        geoLocation: geoLocation.value.text,
+        lat: currentPosition.value?.latitude.toString(),
+        long: currentPosition.value?.longitude.toString(),
         giveAWays: giveaways.value.text,
         painters: selectedPaintersList,
         createdBy: AuthController.instance.user!.name ?? "admin",
@@ -128,6 +140,7 @@ class SitesController extends GetxController {
   void updateSite() async {
     isLoading(true);
     try {
+      LogUtil.debug(currentPosition.value!.latitude);
       ImageModel dummy;
       for (int i = 0; i < uploadedImages.length; i++) {
         imageList.add(uploadedImages[i]);
@@ -147,6 +160,9 @@ class SitesController extends GetxController {
         siteType: typeOfSiteModifier.value?.siteTypeValue,
         // mapLink: ,
         remarks: remarks.value.text,
+        geoLocation: geoLocation.value.text,
+        lat: currentPosition.value?.latitude != null ? currentPosition.value?.latitude.toString() : site?.lat,
+        long: currentPosition.value?.longitude != null ? currentPosition.value?.longitude.toString() : site?.long,
         giveAWays: giveaways.value.text,
         painters: uploadedPaintersList,
         createdBy: site?.createdBy ?? "admin",
@@ -206,6 +222,7 @@ class SitesController extends GetxController {
         uploadedImages.clear();
         deletedId.clear();
         deletedImageList.clear();
+        LogUtil.debug(site?.toJson());
         if (site!.images!.isNotEmpty) {
           for (int i = 0; i < site!.images!.length; i++) {
             uploadedImages.add(site!.images![i]);
@@ -274,5 +291,62 @@ class SitesController extends GetxController {
     LogUtil.debug(deletedImageList.length);
     deletedId.add(index);
     uploadedImages.removeAt(index);
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            currentPosition.value!.latitude, currentPosition.value!.longitude)
+        .then((List<Placemark> placeMark) {
+      Placemark place = placeMark[0];
+      geoLocation.value.text =
+          '${place.street}, ${place.subLocality}, ${place.locality!}, ${place.postalCode}';
+      LogUtil.debug(geoLocation.value.text);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Dialogs.showSnackBar(Get.context,
+          'Location services are disabled. Please enable the services');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Dialogs.showSnackBar(Get.context, 'Location permissions are denied');
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      Dialogs.showSnackBar(Get.context,
+          'Location permissions are permanently denied, we cannot request permissions.');
+      isLoading(false);
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> getCurrentPosition() async {
+    isLocationFetched.value = true;
+    LogUtil.debug(isLocationFetched.value);
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(
+                accuracy: LocationAccuracy.high, distanceFilter: 100))
+        .then((Position position) {
+      currentPosition.value = position;
+      LogUtil.debug(currentPosition.value);
+      _getAddressFromLatLng(currentPosition.value!);
+      isLocationFetched.value = false;
+    }).catchError((e) {
+      debugPrint(e);
+      isLocationFetched.value = false;
+    });
   }
 }

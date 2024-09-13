@@ -11,6 +11,9 @@ class SiteModel {
   String? siteType;
   String? mapLink;
   String? remarks;
+  String? lat;
+  String? long;
+  String? geoLocation;
   String? giveAWays;
   List<Painters>? painters;
   String? createdBy;
@@ -32,6 +35,9 @@ class SiteModel {
       this.siteType,
       this.mapLink,
       this.remarks,
+      this.lat,
+      this.long,
+      this.geoLocation,
       this.giveAWays,
       this.painters,
       this.createdBy,
@@ -52,6 +58,9 @@ class SiteModel {
     String? siteType = json['site_type'] ?? '';
     String? mapLink = json['map_link'] ?? '';
     String? remarks = json['remarks'] ?? '';
+    String? lat = json['latitude'];
+    String? long = json['longitude'];
+    String? geoLocation = json['geolocation'];
     String? giveAWays = json['give_aways'] ?? '';
     List<Painters>? listOfPainters = [];
     List<dynamic> painters = json['painters'];
@@ -79,6 +88,9 @@ class SiteModel {
       siteType: siteType,
       mapLink: mapLink,
       remarks: remarks,
+      lat: lat,
+      long: long,
+      geoLocation: geoLocation,
       giveAWays: giveAWays,
       painters: listOfPainters,
       createdBy: createdBy,
@@ -107,6 +119,9 @@ class SiteModel {
     data['site_type'] = siteType;
     data['map_link'] = mapLink;
     data['remarks'] = remarks;
+    data['latitude'] = lat;
+    data['longitude'] = long;
+    data['geolocation'] = geoLocation;
     data['give_aways'] = giveAWays;
     data['painters'] = painter;
     data['created_by'] = createdBy;
@@ -138,6 +153,9 @@ class SiteModel {
     data['site_type'] = siteType;
     data['map_link'] = mapLink;
     data['remarks'] = remarks;
+    data['latitude'] = lat;
+    data['longitude'] = long;
+    data['geolocation'] = geoLocation;
     data['give_aways'] = giveAWays;
     data['painters'] = painter;
     data['created_by'] = createdBy;
