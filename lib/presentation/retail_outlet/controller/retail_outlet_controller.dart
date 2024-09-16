@@ -12,6 +12,7 @@ import '../../../core/util/log_util.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/controller/home_controller.dart';
 import '../../home/home_page.dart';
+import '../../models/typeOfCustomerModel.dart';
 import '../../site/model/common_model.dart';
 import '../model/common_model.dart';
 import '../model/retail_outlet_model.dart';
@@ -44,7 +45,9 @@ class RetailOutletController extends GetxController {
   List<Customers> customersList = [];
   List<ImageModel> deletedImageList = RxList.empty();
   final Rxn<Position?> currentPosition = Rxn<Position>(null);
-
+  RxString sampling = RxString('No');
+  RxString engagement = RxString('No');
+  RxString videoShown = RxString('No');
   static RetailOutletController get instance =>
       Get.find<RetailOutletController>();
 
@@ -66,6 +69,9 @@ class RetailOutletController extends GetxController {
     cityModifier.value = null;
     typeOfCustomerModifier.value = null;
     selectedCustomerList.value = [];
+    sampling = RxString('No');
+    engagement = RxString('No');
+    videoShown = RxString('No');
     getCurrentPosition();
   }
 
@@ -107,6 +113,9 @@ class RetailOutletController extends GetxController {
         long: currentPosition.value?.longitude.toString(),
         createdBy: AuthController.instance.user!.name ?? "admin",
         createdAt: DateTime.now().toString(),
+        sampling: sampling.value == "Yes" ? 1 : 0,
+        engagement: engagement.value == "Yes" ? 1 : 0,
+        videoShown: videoShown.value == "Yes" ? 1 : 0,
         updatedBy: '',
         updatedAt: '',
         cityName: cityModifier.value?.cityName,
@@ -158,11 +167,14 @@ class RetailOutletController extends GetxController {
         giveaways: giveaways.value.text,
         customers: uploadedCustomerList,
         geoLocation: geoLocation.value.text,
-        lat: currentPosition.value?.latitude.toString(),
-        long: currentPosition.value?.longitude.toString(),
-        createdBy: outlet?.createdBy ?? "admin",
+        lat: currentPosition.value?.latitude == null ? outlet?.lat : currentPosition.value?.latitude.toString(),
+        long:currentPosition.value?.longitude == null ? outlet?.long : currentPosition.value?.longitude.toString(),
+        sampling: sampling.value == "Yes" ? 1 : 0,
+        engagement: engagement.value == "Yes" ? 1 : 0,
+        videoShown: videoShown.value == "Yes" ? 1 : 0,
+        createdBy: outlet?.createdBy ?? "",
         createdAt: outlet?.createdAt ?? DateTime.now().toString(),
-        updatedBy: AuthController.instance.user!.name ?? "admin",
+        updatedBy: AuthController.instance.user!.name ?? "",
         updatedAt: DateTime.now().toString(),
         cityName: cityModifier.value?.cityName,
         images: deletedImageList,
@@ -195,7 +207,7 @@ class RetailOutletController extends GetxController {
     }
   }
 
-  void editSite() async {
+  void editOutlet() async {
     isEditLoading(true);
     outlet = Get.arguments;
     LogUtil.debug(outlet?.toJson());
@@ -211,6 +223,9 @@ class RetailOutletController extends GetxController {
             (element) => element.cityName == outlet!.cityName);
         setCityValue(cityModifier.value);
         setSiteTypeValue(typeOfCustomerModifier.value?.siteTypeValue);
+        sampling.value = outlet?.sampling == 1 ? "Yes" : "No";
+        engagement.value = outlet?.engagement == 1 ? "Yes" : "No";
+        videoShown.value = outlet?.videoShown == 1 ? "Yes" : "No";
         selectedCustomerList.clear();
         uploadedCustomerList.clear();
         selectedImages.clear();

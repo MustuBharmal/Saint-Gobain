@@ -1,3 +1,4 @@
+import '../../models/typeOfCustomerModel.dart';
 import 'common_model.dart';
 
 class SiteModel {
@@ -14,8 +15,11 @@ class SiteModel {
   String? lat;
   String? long;
   String? geoLocation;
+  int? sampling;
+  int? engagement;
+  int? videoShown;
   String? giveAWays;
-  List<Painters>? painters;
+  List<Customers>? painters;
   String? createdBy;
   String? createdAt;
   String? updatedBy;
@@ -40,6 +44,9 @@ class SiteModel {
       this.geoLocation,
       this.giveAWays,
       this.painters,
+      this.sampling,
+      this.engagement,
+      this.videoShown,
       this.createdBy,
       this.createdAt,
       this.updatedBy,
@@ -62,11 +69,14 @@ class SiteModel {
     String? long = json['longitude'];
     String? geoLocation = json['geolocation'];
     String? giveAWays = json['give_aways'] ?? '';
-    List<Painters>? listOfPainters = [];
+    List<Customers>? listOfPainters = [];
     List<dynamic> painters = json['painters'];
     for (var element in painters) {
-      listOfPainters.add(Painters.fromJson(element));
+      listOfPainters.add(Customers.fromJson(element));
     }
+    int? sampling = json['sampling'];
+    int? engagement = json['engagement'];
+    int? videoShown = json['video_shown'];
     String? createdBy = json['created_by'] ?? '';
     String? createdAt = json['created_at'] ?? '';
     String? updatedBy = json['updated_by'] ?? '';
@@ -93,6 +103,9 @@ class SiteModel {
       geoLocation: geoLocation,
       giveAWays: giveAWays,
       painters: listOfPainters,
+      sampling: sampling,
+      engagement: engagement,
+      videoShown: videoShown,
       createdBy: createdBy,
       createdAt: createdAt,
       updatedBy: updatedBy,
@@ -124,6 +137,9 @@ class SiteModel {
     data['geolocation'] = geoLocation;
     data['give_aways'] = giveAWays;
     data['painters'] = painter;
+    data['sampling'] = sampling;
+    data['engagement'] = engagement;
+    data['video_shown'] = videoShown;
     data['created_by'] = createdBy;
     data['created_at'] = createdAt;
     data['updated_by'] = updatedBy;
@@ -158,6 +174,9 @@ class SiteModel {
     data['geolocation'] = geoLocation;
     data['give_aways'] = giveAWays;
     data['painters'] = painter;
+    data['sampling'] = sampling;
+    data['engagement'] = engagement;
+    data['video_shown'] = videoShown;
     data['created_by'] = createdBy;
     data['created_at'] = createdAt;
     data['updated_by'] = updatedBy;
@@ -165,27 +184,6 @@ class SiteModel {
     data['company_id'] = companyId;
     data['city_name'] = cityName;
     data['deleted_images'] = image;
-    return data;
-  }
-}
-
-class Painters {
-  String? name;
-  String? phone;
-
-  Painters({this.name, this.phone});
-
-  factory Painters.fromJson(Map<String, dynamic> json) {
-    String? name = json['name'] ?? '';
-    String? phone = json['phone'] ?? '';
-
-    return Painters(name: name, phone: phone);
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['phone'] = phone;
     return data;
   }
 }

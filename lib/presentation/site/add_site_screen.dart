@@ -5,11 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
+import '../models/typeOfCustomerModel.dart';
 import '../widgets/add_item_button.dart';
+import '../widgets/custom_radio_widget.dart';
 import '../widgets/painters_adding_widget.dart';
 import './controller/site_controller.dart';
 import 'model/common_model.dart';
-import 'model/site_model.dart';
 
 class AddSiteScreen extends GetView<SitesController> {
   AddSiteScreen({super.key});
@@ -130,6 +131,56 @@ class AddSiteScreen extends GetView<SitesController> {
                             text: "Select Site City",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        DropdownButtonFormField<CityModel>(
+                          validator: (CityModel? input) {
+                            if (input?.cityName == null) {
+                              Get.snackbar('Warning', 'Select your city.',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                          isExpanded: true,
+                          menuMaxHeight: 500,
+                          elevation: 16,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.black,
+                          ),
+                          decoration: InputDecoration(
+                            contentPadding:
+                            const EdgeInsets.only(top: 5, left: 20),
+                            errorStyle: const TextStyle(fontSize: 0),
+                            hintStyle: TextStyle(
+                              color: AppColors.genderTextColor,
+                            ),
+                            hintText: ' -select- ',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          value: controller.cityModifier.value,
+                          onChanged: controller.setCityValue,
+                          items: controller.citiesList
+                              .map<DropdownMenuItem<CityModel>>(
+                                  (CityModel value) {
+                                return DropdownMenuItem<CityModel>(
+                                  value: value,
+                                  child: Text(
+                                    value.cityName ?? '-',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xffA6A6A6),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -169,56 +220,6 @@ class AddSiteScreen extends GetView<SitesController> {
                                   return null;
                                 },
                               ),
-                        SizedBox(
-                          height: Get.height * dropSize,
-                        ),
-                        DropdownButtonFormField<CityModel>(
-                          validator: (CityModel? input) {
-                            if (input?.cityName == null) {
-                              Get.snackbar('Warning', 'Select your city.',
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue);
-                              return '';
-                            }
-                            return null;
-                          },
-                          isExpanded: true,
-                          menuMaxHeight: 500,
-                          elevation: 16,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.black,
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 5, left: 20),
-                            errorStyle: const TextStyle(fontSize: 0),
-                            hintStyle: TextStyle(
-                              color: AppColors.genderTextColor,
-                            ),
-                            hintText: ' -select- ',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          value: controller.cityModifier.value,
-                          onChanged: controller.setCityValue,
-                          items: controller.citiesList
-                              .map<DropdownMenuItem<CityModel>>(
-                                  (CityModel value) {
-                            return DropdownMenuItem<CityModel>(
-                              value: value,
-                              child: Text(
-                                value.cityName ?? '-',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xffA6A6A6),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
@@ -279,6 +280,33 @@ class AddSiteScreen extends GetView<SitesController> {
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.sampling,
+                            titleText:'Is sampling completed?',
+                            onPressFun: (value) {
+                              controller.sampling.value = value;
+                            }),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.engagement,
+                            titleText:'Was there engagement?',
+                            onPressFun: (value) {
+                              controller.engagement.value = value;
+                            }),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.videoShown,
+                            titleText:'Is video shown?',
+                            onPressFun: (value) {
+                              controller.videoShown.value = value;
+                            }),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
                         myText(
                             text: "Remarks",
                             style: const TextStyle(
@@ -310,14 +338,14 @@ class AddSiteScreen extends GetView<SitesController> {
                         if (Get.arguments == null)
                           AddItemButton(
                             onTapFun: () {
-                              controller.selectedPaintersList.add(Painters());
+                              controller.selectedPaintersList.add(Customers());
                             },
                             buttonText: 'Add Painters',
                           )
                         else
                           AddItemButton(
                             onTapFun: () {
-                              controller.uploadedPaintersList.add(Painters());
+                              controller.uploadedPaintersList.add(Customers());
                             },
                             buttonText: 'Add Painters',
                           ),
@@ -326,11 +354,13 @@ class AddSiteScreen extends GetView<SitesController> {
                         ),
                         if (Get.arguments == null)
                           PaintersAddingWidget(
-                            paintersList: controller.selectedPaintersList,
+                            paintersList: controller.selectedPaintersList.value,
+                            typeOfPaintersList: controller.typeOfPaintersListSec,
                           )
                         else
                           PaintersAddingWidget(
-                            paintersList: controller.uploadedPaintersList,
+                            paintersList: controller.uploadedPaintersList.value,
+                            typeOfPaintersList: controller.typeOfPaintersListSec,
                           ),
                         if (Get.arguments == null)
                           Wrap(

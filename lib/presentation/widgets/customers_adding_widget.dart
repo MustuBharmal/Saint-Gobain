@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
-import '../retail_outlet/model/retail_outlet_model.dart';
+import '../models/typeOfCustomerModel.dart';
 
 class CustomersAddingWidget extends StatelessWidget {
   final List<Customers> uploadedCustomerList;

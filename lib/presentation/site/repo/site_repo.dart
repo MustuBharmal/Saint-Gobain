@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import '../../../core/util/log_util.dart';
 import '../../../service/http_service.dart';
 import '../../auth/models/user_model.dart';
+import '../../retail_outlet/model/common_model.dart';
 import '../model/common_model.dart';
 import '../model/site_model.dart';
 
@@ -104,6 +105,29 @@ abstract class SiteRepo {
         List<dynamic> siteData = result['data'];
         for (var element in siteData) {
           resultList.add(SiteModel.fromJson(element));
+        }
+      } else {
+        throw 'unauthorized';
+      }
+    } catch (e) {
+      LogUtil.error(e);
+      rethrow;
+    }
+    return resultList;
+  }
+
+  static Future<List<CustomerTypeModel>> getTypeOfPaintersTypeData() async {
+    List<CustomerTypeModel> resultList = [];
+    try {
+      Map<String, dynamic> data = {
+        _dbTypeKey: _dbCommonValue,
+        "common_type": "painter_type"
+      };
+      final result = await HttpService.post(_getCommonPath, data);
+      if (result['status'] == 200) {
+        List<dynamic> typeOfSitesData = result['data'];
+        for (var element in typeOfSitesData) {
+          resultList.add(CustomerTypeModel.fromJson(element));
         }
       } else {
         throw 'unauthorized';

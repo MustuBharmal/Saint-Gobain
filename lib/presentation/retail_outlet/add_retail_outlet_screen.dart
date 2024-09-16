@@ -5,11 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
+import '../models/typeOfCustomerModel.dart';
 import '../site/model/common_model.dart';
 import '../widgets/add_item_button.dart';
+import '../widgets/custom_radio_widget.dart';
 import '../widgets/customers_adding_widget.dart';
 import './controller/retail_outlet_controller.dart';
-import 'model/retail_outlet_model.dart';
 
 class AddRetailOutletScreen extends GetView<RetailOutletController> {
   AddRetailOutletScreen({super.key});
@@ -19,7 +20,7 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.arguments != null ? controller.editSite() : controller.clear();
+    Get.arguments != null ? controller.editOutlet() : controller.clear();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWidget(
@@ -220,6 +221,33 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                           }).toList(),
                         ),
                         SizedBox(
+                          height: Get.height * size,
+                        ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.sampling,
+                            titleText:'Is sampling completed?',
+                            onPressFun: (value) {
+                              controller.sampling.value = value;
+                            }),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.engagement,
+                            titleText:'Was there engagement?',
+                            onPressFun: (value) {
+                              controller.engagement.value = value;
+                            }),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        RadioButtonWidget(
+                            radioButtonValue: controller.videoShown,
+                            titleText:'Is video shown?',
+                            onPressFun: (value) {
+                              controller.videoShown.value = value;
+                            }),
+                        SizedBox(
                           height: Get.height * dropSize,
                         ),
                         myText(
@@ -256,13 +284,13 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                         if (Get.arguments == null)
                           CustomersAddingWidget(
                             uploadedCustomerList:
-                                controller.selectedCustomerList,
+                                controller.selectedCustomerList.value,
                             typeOfCustomList: controller.typeOfCustomerListSec,
                           )
                         else
                           CustomersAddingWidget(
                             uploadedCustomerList:
-                                controller.uploadedCustomerList,
+                                controller.uploadedCustomerList.value,
                             typeOfCustomList: controller.typeOfCustomerListSec,
                           ),
                         if (Get.arguments == null)

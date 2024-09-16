@@ -20,7 +20,7 @@ TextStyle subtitleStyle3 = GoogleFonts.poppins(
 TextStyle subtitleStyle2 = TextStyle(
   color: AppColors.grey,
   overflow: TextOverflow.fade,
-  fontSize: 15,
+  fontSize: 14,
   fontWeight: FontWeight.bold,
 );
 TextStyle appBarStyle = GoogleFonts.poppins(

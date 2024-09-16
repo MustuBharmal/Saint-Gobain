@@ -1,3 +1,4 @@
+import '../../models/typeOfCustomerModel.dart';
 import '../../site/model/common_model.dart';
 
 class RetailOutletModel {
@@ -20,6 +21,9 @@ class RetailOutletModel {
   String? long;
   String? geoLocation;
   String? cityName;
+  int? sampling;
+  int? engagement;
+  int? videoShown;
   List<ImageModel>? images;
 
   RetailOutletModel(
@@ -42,6 +46,9 @@ class RetailOutletModel {
       this.long,
       this.geoLocation,
       this.cityName,
+      this.sampling,
+      this.engagement,
+      this.videoShown,
       this.images});
 
   factory RetailOutletModel.fromJson(Map<String, dynamic> json) {
@@ -67,6 +74,9 @@ class RetailOutletModel {
     String? long = json['longitude'];
     String? geoLocation = json['geolocation'];
     String? cityName = json['city_name'];
+    int? sampling = json['sampling'];
+    int? engagement = json['engagement'];
+    int? videoShown = json['video_shown'];
     List<ImageModel>? listOfImages = [];
     List<dynamic> images = json['images'];
     for (var element in images) {
@@ -91,6 +101,9 @@ class RetailOutletModel {
       long: long,
       geoLocation: geoLocation,
       cityName: cityName,
+      sampling: sampling,
+      engagement: engagement,
+      videoShown: videoShown,
       images: listOfImages,
     );
   }
@@ -118,6 +131,9 @@ class RetailOutletModel {
     data['latitude'] = lat;
     data['longitude'] = long;
     data['geolocation'] = geoLocation;
+    data['sampling'] = sampling;
+    data['engagement'] = engagement;
+    data['video_shown'] = videoShown;
     data['city_name'] = cityName;
     return data;
   }
@@ -150,35 +166,11 @@ class RetailOutletModel {
     data['latitude'] = lat;
     data['longitude'] = long;
     data['geolocation'] = geoLocation;
+    data['sampling'] = sampling;
+    data['engagement'] = engagement;
+    data['video_shown'] = videoShown;
     data['city_name'] = cityName;
     return data;
   }
 }
 
-class Customers {
-  String? name;
-  String? type;
-  String? phone;
-
-  Customers({this.name, this.type, this.phone});
-
-  factory Customers.fromJson(Map<String, dynamic> json) {
-    String? name = json['name'];
-    String? type = json['type'];
-    String? phone = json['phone'];
-
-    return Customers(
-      name: name,
-      type: type,
-      phone: phone,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['type'] = type;
-    data['phone'] = phone;
-    return data;
-  }
-}

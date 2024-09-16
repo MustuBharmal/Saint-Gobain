@@ -12,6 +12,8 @@ import '../../../core/util/log_util.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../home/controller/home_controller.dart';
 import '../../home/home_page.dart';
+import '../../models/typeOfCustomerModel.dart';
+import '../../retail_outlet/model/common_model.dart';
 import '../model/common_model.dart';
 import '../model/site_model.dart';
 import '../repo/site_repo.dart';
@@ -27,8 +29,10 @@ class SitesController extends GetxController {
   RxList<CityModel> citiesList = RxList.empty();
   RxList<SiteTypeModel> typeOfSitesList = RxList.empty();
   RxList<SiteModel> sitesList = RxList.empty();
-  RxList<Painters> selectedPaintersList = RxList.empty();
-  RxList<Painters> uploadedPaintersList = RxList.empty();
+  RxList<Customers> selectedPaintersList = RxList.empty();
+  RxList<Customers> uploadedPaintersList = RxList.empty();
+  RxList<CustomerTypeModel> typeOfPaintersList = RxList.empty();
+  RxList<Customers> typeOfPaintersListSec = RxList.empty();
   SiteModel? site;
   var isLoading = false.obs;
   var isEditLoading = false.obs;
@@ -40,10 +44,12 @@ class SitesController extends GetxController {
   RxList<ImageModel> uploadedImages = RxList.empty();
   List<int> deletedId = [];
   List<ImageModel> imageList = [];
-  List<Painters> paintersList = [];
+  List<Customers> paintersList = [];
   List<ImageModel> deletedImageList = RxList.empty();
   final Rxn<Position?> currentPosition = Rxn<Position>(null);
-
+  RxString sampling = RxString('No');
+  RxString engagement = RxString('No');
+  RxString videoShown = RxString('No');
   static SitesController get instance => Get.find<SitesController>();
 
   @override
@@ -51,6 +57,7 @@ class SitesController extends GetxController {
     // TODO: implement onInit
     getCities();
     getTypeOfSites();
+    getTypeOfPainters();
     super.onInit();
   }
 
@@ -64,8 +71,10 @@ class SitesController extends GetxController {
     giveaways.value.text = '';
     cityModifier.value = null;
     typeOfSiteModifier.value = null;
+    sampling = RxString('No');
+    engagement = RxString('No');
+    videoShown = RxString('No');
     getCurrentPosition();
-    LogUtil.debug('running');
   }
 
   @override
@@ -105,9 +114,12 @@ class SitesController extends GetxController {
         geoLocation: geoLocation.value.text,
         lat: currentPosition.value?.latitude.toString(),
         long: currentPosition.value?.longitude.toString(),
+        sampling: sampling.value == "Yes" ? 1 : 0,
+        engagement: engagement.value == "Yes" ? 1 : 0,
+        videoShown: videoShown.value == "Yes" ? 1 : 0,
         giveAWays: giveaways.value.text,
         painters: selectedPaintersList,
-        createdBy: AuthController.instance.user!.name ?? "admin",
+        createdBy: AuthController.instance.user!.name ?? "",
         createdAt: DateTime.now().toString(),
         updatedBy: '',
         updatedAt: '',
@@ -140,7 +152,6 @@ class SitesController extends GetxController {
   void updateSite() async {
     isLoading(true);
     try {
-      LogUtil.debug(currentPosition.value!.latitude);
       ImageModel dummy;
       for (int i = 0; i < uploadedImages.length; i++) {
         imageList.add(uploadedImages[i]);
@@ -163,6 +174,9 @@ class SitesController extends GetxController {
         geoLocation: geoLocation.value.text,
         lat: currentPosition.value?.latitude != null ? currentPosition.value?.latitude.toString() : site?.lat,
         long: currentPosition.value?.longitude != null ? currentPosition.value?.longitude.toString() : site?.long,
+        sampling: sampling.value == "Yes" ? 1 : 0,
+        engagement: engagement.value == "Yes" ? 1 : 0,
+        videoShown: videoShown.value == "Yes" ? 1 : 0,
         giveAWays: giveaways.value.text,
         painters: uploadedPaintersList,
         createdBy: site?.createdBy ?? "admin",
@@ -195,6 +209,7 @@ class SitesController extends GetxController {
       Get.back();
     } catch (e) {
       isLoading(false);
+      LogUtil.debug(e.toString());
       Get.snackbar('Error', "$e");
     }
   }
@@ -213,6 +228,10 @@ class SitesController extends GetxController {
             (element) => element.siteTypeValue == site!.siteType);
         setCityValue(cityModifier.value);
         setSiteTypeValue(typeOfSiteModifier.value);
+        geoLocation.value.text = site!.geoLocation!;
+        sampling.value = site?.sampling == 1 ? "Yes" : "No";
+        engagement.value = site?.engagement == 1 ? "Yes" : "No";
+        videoShown.value = site?.videoShown == 1 ? "Yes" : "No";
         siteAddress.value.text = site!.siteAddress ?? '';
         remarks.value.text = site!.remarks ?? '';
         giveaways.value.text = site!.giveAWays ?? '';
@@ -252,6 +271,15 @@ class SitesController extends GetxController {
   getTypeOfSites() async {
     typeOfSitesList.clear();
     typeOfSitesList.addAll(await SiteRepo.getTypeOfSitesData());
+  }
+
+  getTypeOfPainters() async {
+    typeOfPaintersList.clear();
+    typeOfPaintersList
+        .addAll(await SiteRepo.getTypeOfPaintersTypeData());
+    for (var e in typeOfPaintersList) {
+      typeOfPaintersListSec.add(Customers(type: e.siteTypeValue));
+    }
   }
 
   void setCityValue(CityModel? city) {
