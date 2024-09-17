@@ -1,8 +1,10 @@
 
+import 'package:saint_gobain/presentation/naka_painters/model/ran_painter_model.dart';
+
 import '../../../core/util/log_util.dart';
 import '../../../core/util/storage_util.dart';
 import '../../retail_outlet/model/retail_outlet_model.dart';
-import '../../site/model/common_model.dart';
+import '../../common_models/common_model.dart';
 import '../../site/model/site_model.dart';
 import '/../../../service/http_service.dart';
 
@@ -17,7 +19,7 @@ abstract class HomePageRepo {
   static const String _dbCityTypeValue = 'getCities';
   static const String _getCommonPath = '/api_select/index.php';
   static const String _allOutletTypeValue = 'getOutlets';
-
+  static const String _allPaintersTypeValue = 'getNakaPainters';
   static Future<List<CityModel>> getCitesData() async {
     List<CityModel> resultList = [];
     try {
@@ -103,6 +105,32 @@ abstract class HomePageRepo {
         List<dynamic> outletData = result['data'];
         for (var element in outletData) {
           resultList.add(RetailOutletModel.fromJson(element));
+        }
+        return resultList;
+      } else {
+        throw 'unauthorized';
+      }
+    } catch (e) {
+      LogUtil.error(e);
+      rethrow;
+    }
+  }
+
+  static Future<List<RanPainterModel>> getListOfRanPainters() async {
+    List<RanPainterModel> resultList = [];
+    try {
+      Map<String, dynamic> data = {
+        _dbTypeKey: _allPaintersTypeValue,
+        _companyIdKey: AuthController.instance.user!.companyId
+      };
+      final result = await HttpService.post(
+        _sitesPath,
+        data,
+      );
+      if (result['status'] == 200) {
+        List<dynamic> painterData = result['data'];
+        for (var element in painterData) {
+          resultList.add(RanPainterModel.fromJson(element));
         }
         return resultList;
       } else {

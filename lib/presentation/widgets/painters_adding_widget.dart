@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
-import '../models/typeOfCustomerModel.dart';
+import '../common_models/type_of_customer_model.dart';
 
 class PaintersAddingWidget extends StatelessWidget {
   final List<Customers> paintersList;

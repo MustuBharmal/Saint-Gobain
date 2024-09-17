@@ -70,7 +70,7 @@ class ListOfRetailOutletScreen extends GetView<RetailOutletController> {
                         // textInputAction: TextInputAction.done,
                         leading: const Icon(Icons.search),
                         hintText: 'Search Retail Outlet',
-                        onChanged: HomePageController.instance.searchColleges,
+                        onChanged: HomePageController.instance.searchOutlets,
                       ),
                     ),
                     if (outlets.isEmpty)

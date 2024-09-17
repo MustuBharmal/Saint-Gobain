@@ -3,18 +3,17 @@ import '../../../core/util/log_util.dart';
 import '../../../service/http_service.dart';
 import '../../auth/models/user_model.dart';
 import '../../common_models/common_type_models.dart';
-import '../../retail_outlet/model/common_model.dart';
-import '../model/site_model.dart';
+import '../model/ran_painter_model.dart';
 
-abstract class SiteRepo {
+abstract class RanOutletRepo {
   static const String _getCommonPath = '/api_select/index.php';
   static const String _getUpdatePath = '/api_update/index.php';
   static const String _dbTypeKey = 'dbtype';
   static const String _dbCommonValue = 'getCommons';
-  static const String _dbSiteTypeValue = 'getSites';
+  static const String _dbPainterTypeValue = 'getNakaPainters';
   static const String _uploadPicPath = '/api_image_upload/index.php';
 
-  static Future<String> uploadSiteImage(
+  static Future<String> uploadPainterImage(
       String imgString, String imageKey, UserModel user, int siteId) async {
     try {
       Map<String, dynamic> data = {
@@ -38,10 +37,10 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<int> insertSite(SiteModel site) async {
+  static Future<int> insertRanPainter(RanPainterModel painter) async {
     try {
-      LogUtil.debug(site.toJson());
-      Map<String, dynamic> data = site.toJson();
+      LogUtil.debug(painter.toJson());
+      Map<String, dynamic> data = painter.toJson();
       final result = await HttpService.post(_getUpdatePath, data);
       if (result['status'] == 200) {
         return (result['data']['id']);
@@ -54,10 +53,10 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<void> updateSite(SiteModel site) async {
+  static Future<void> updateRanPainter(RanPainterModel painter) async {
     try {
-      LogUtil.debug(site.toJsonDelete());
-      Map<String, dynamic> data = site.toJsonDelete();
+      LogUtil.debug(painter.toJsonDelete());
+      Map<String, dynamic> data = painter.toJsonDelete();
       final result = await HttpService.post(_getUpdatePath, data);
       if (result['status'] == 200) {
         LogUtil.warning(result['message']);
@@ -70,12 +69,12 @@ abstract class SiteRepo {
     }
   }
 
-  static Future<List<CommonTypeModel>> getTypeOfSitesData() async {
+  static Future<List<CommonTypeModel>> getTypeOfPainterTypeData() async {
     List<CommonTypeModel> resultList = [];
     try {
       Map<String, dynamic> data = {
         _dbTypeKey: _dbCommonValue,
-        "common_type": "site_type"
+        "common_type": "painter_type"
       };
       final result = await HttpService.post(_getCommonPath, data);
       if (result['status'] == 200) {
@@ -93,41 +92,18 @@ abstract class SiteRepo {
     return resultList;
   }
 
-  static Future<List<SiteModel>> getSitesData(int companyId) async {
-    List<SiteModel> resultList = [];
+  static Future<List<RanPainterModel>> getRanPainterData(int companyId) async {
+    List<RanPainterModel> resultList = [];
     try {
       Map<String, dynamic> data = {
-        _dbTypeKey: _dbSiteTypeValue,
+        _dbTypeKey: _dbPainterTypeValue,
         "company_id": companyId
       };
       final result = await HttpService.post(_getCommonPath, data);
       if (result['success']) {
-        List<dynamic> siteData = result['data'];
-        for (var element in siteData) {
-          resultList.add(SiteModel.fromJson(element));
-        }
-      } else {
-        throw 'unauthorized';
-      }
-    } catch (e) {
-      LogUtil.error(e);
-      rethrow;
-    }
-    return resultList;
-  }
-
-  static Future<List<CustomerTypeModel>> getTypeOfPaintersTypeData() async {
-    List<CustomerTypeModel> resultList = [];
-    try {
-      Map<String, dynamic> data = {
-        _dbTypeKey: _dbCommonValue,
-        "common_type": "painter_type"
-      };
-      final result = await HttpService.post(_getCommonPath, data);
-      if (result['status'] == 200) {
-        List<dynamic> typeOfSitesData = result['data'];
-        for (var element in typeOfSitesData) {
-          resultList.add(CustomerTypeModel.fromJson(element));
+        List<dynamic> outletData = result['data'];
+        for (var element in outletData) {
+          resultList.add(RanPainterModel.fromJson(element));
         }
       } else {
         throw 'unauthorized';

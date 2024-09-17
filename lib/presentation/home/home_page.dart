@@ -5,6 +5,7 @@ import '../../core/style/app_color.dart';
 import '../../core/style/styles.dart';
 import '../../widgets/general_widgets.dart';
 import '../auth/controller/auth_controller.dart';
+import '../naka_painters/list_of_ran_painter_screen.dart';
 import '../retail_outlet/list_of_retail_outlet_screen.dart';
 import '../site/list_of_sites_screen.dart';
 import '../widgets/home_screen_dart.dart';
@@ -45,98 +46,117 @@ class HomePage extends GetView<HomePageController> {
                       AuthController.instance.user!.companyName!.toUpperCase(),
                   style: subtitleStyle3),
             ),
-            SizedBox(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Container(
+                height: Get.height * 0.125,
+                width: Get.width,
+                decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                        color: AppColors.shadow,
+                        blurRadius: 15,
+                        spreadRadius: 2,
+                        offset: Offset(0, 25)),
+                  ],
+                  borderRadius: BorderRadius.circular(30),
+                  color: AppColors.white,
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      height: Get.height * 0.235,
-                      decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: AppColors.shadow,
-                              blurRadius: 15,
-                              spreadRadius: 2,
-                              offset: Offset(0, 25)),
-                        ],
-                        borderRadius: BorderRadius.circular(30),
-                        color: AppColors.white,
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 5),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: Get.width * 0.20,
-                                  height: Get.height * 0.08,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.blue),
-                                  child: Obx(
-                                    () => Center(
-                                      child: controller.isLoading.value
-                                          ? CircularProgressIndicator(
-                                              color: AppColors.white,
-                                            )
-                                          : Text(
-                                              controller
-                                                  .lengthOfListOfStudents.value
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors.white),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                myText(
-                                    text: 'Outlets',
-                                    style: TextStyle(color: AppColors.black))
-                              ],
+                          Container(
+                            width: Get.width * 0.20,
+                            height: Get.height * 0.08,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: AppColors.blue),
+                            child: Obx(
+                              () => Center(
+                                child: controller.isLoading.value
+                                    ? CircularProgressIndicator(
+                                        color: AppColors.white,
+                                      )
+                                    : Text(
+                                        controller.lengthOfOutlets.value
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.white),
+                                      ),
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: Get.width * 0.20,
-                                  height: Get.height * 0.08,
-                                  decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppColors.blue),
-                                  child: Obx(
-                                    () => Center(
-                                      child: controller.isLoading.value
-                                          ? CircularProgressIndicator(
-                                              color: AppColors.white,
-                                            )
-                                          : Text(
-                                              controller.lengthOfListOfSites
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 24,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors.white),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                                myText(
-                                    text: 'Sites',
-                                    style: TextStyle(color: AppColors.black))
-                              ],
+                          myText(
+                              text: 'Outlets',
+                              style: TextStyle(color: AppColors.black))
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: Get.width * 0.20,
+                            height: Get.height * 0.08,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: AppColors.blue),
+                            child: Obx(
+                              () => Center(
+                                child: controller.isLoading.value
+                                    ? CircularProgressIndicator(
+                                        color: AppColors.white,
+                                      )
+                                    : Text(
+                                        controller.lengthOfSites.toString(),
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.white),
+                                      ),
+                              ),
                             ),
                           ),
+                          myText(
+                              text: 'Sites',
+                              style: TextStyle(color: AppColors.black))
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: Get.width * 0.20,
+                            height: Get.height * 0.08,
+                            decoration: const BoxDecoration(
+                                shape: BoxShape.circle, color: AppColors.blue),
+                            child: Obx(
+                                  () => Center(
+                                child: controller.isLoading.value
+                                    ? CircularProgressIndicator(
+                                  color: AppColors.white,
+                                )
+                                    : Text(
+                                  controller.lengthOfRanPainters.toString(),
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                          myText(
+                              text: 'Painters',
+                              style: TextStyle(color: AppColors.black))
                         ],
                       ),
                     ),
@@ -164,6 +184,14 @@ class HomePage extends GetView<HomePageController> {
                   },
                 ),
               ],
+            ),
+            HomeScreenCard(
+              color: Colors.lightGreen,
+              imageFile: 'assets/images/interested.png',
+              label: "Painters",
+              onTap: () {
+                Get.toNamed(ListOfRanPainterScreen.routeName);
+              },
             ),
           ],
         ),

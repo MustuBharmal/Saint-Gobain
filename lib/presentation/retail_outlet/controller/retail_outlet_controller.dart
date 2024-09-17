@@ -10,10 +10,10 @@ import '../../../core/style/app_color.dart';
 import '../../../core/util/image_util.dart';
 import '../../../core/util/log_util.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../common_models/type_of_customer_model.dart';
 import '../../home/controller/home_controller.dart';
 import '../../home/home_page.dart';
-import '../../models/typeOfCustomerModel.dart';
-import '../../site/model/common_model.dart';
+import '../../common_models/common_model.dart';
 import '../model/common_model.dart';
 import '../model/retail_outlet_model.dart';
 import '../repo/retail_outlet_repo.dart';
@@ -134,8 +134,8 @@ class RetailOutletController extends GetxController {
       HomePageController.instance.listOfRetailOutlets.add(outlet!);
       isLoading(false);
       Get.offAllNamed(HomePage.routeName);
-      HomePageController.instance.lengthOfListOfSites.value =
-          HomePageController.instance.lengthOfListOfSites.value + 1;
+      HomePageController.instance.lengthOfSites.value =
+          HomePageController.instance.lengthOfSites.value + 1;
       Get.snackbar('Congrats!', 'Retail Outlet is inserted.',
           backgroundColor: AppColors.blue, colorText: AppColors.white);
     } catch (e) {
@@ -258,6 +258,7 @@ class RetailOutletController extends GetxController {
   }
 
   getTypeOfCustomers() async {
+    HomePageController.instance.searchOutlets('');
     typeOfCustomerList.clear();
     typeOfCustomerList
         .addAll(await RetailOutletRepo.getTypeOfCustomerTypeData());

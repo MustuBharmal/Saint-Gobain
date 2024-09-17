@@ -10,11 +10,12 @@ import '../../../core/style/app_color.dart';
 import '../../../core/util/image_util.dart';
 import '../../../core/util/log_util.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../common_models/common_type_models.dart';
+import '../../common_models/type_of_customer_model.dart';
 import '../../home/controller/home_controller.dart';
 import '../../home/home_page.dart';
-import '../../models/typeOfCustomerModel.dart';
 import '../../retail_outlet/model/common_model.dart';
-import '../model/common_model.dart';
+import '../../common_models/common_model.dart';
 import '../model/site_model.dart';
 import '../repo/site_repo.dart';
 
@@ -27,7 +28,7 @@ class SitesController extends GetxController {
   Rx<TextEditingController> geoLocation = TextEditingController().obs;
   Rx<TextEditingController> giveaways = TextEditingController().obs;
   RxList<CityModel> citiesList = RxList.empty();
-  RxList<SiteTypeModel> typeOfSitesList = RxList.empty();
+  RxList<CommonTypeModel> typeOfSitesList = RxList.empty();
   RxList<SiteModel> sitesList = RxList.empty();
   RxList<Customers> selectedPaintersList = RxList.empty();
   RxList<Customers> uploadedPaintersList = RxList.empty();
@@ -38,7 +39,7 @@ class SitesController extends GetxController {
   var isEditLoading = false.obs;
   var isLocationFetched = false.obs;
   Rx<CityModel?> cityModifier = Rx(null);
-  Rx<SiteTypeModel?> typeOfSiteModifier = Rx(null);
+  Rx<CommonTypeModel?> typeOfSiteModifier = Rx(null);
   Rx<SiteModel?> siteModifier = Rx(null);
   RxList<Uint8List> selectedImages = RxList.empty();
   RxList<ImageModel> uploadedImages = RxList.empty();
@@ -108,7 +109,7 @@ class SitesController extends GetxController {
         contractorAddress: contractorAddress.value.text,
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
-        siteType: typeOfSiteModifier.value?.siteTypeValue,
+        siteType: typeOfSiteModifier.value?.commonTypeValue,
         // mapLink: ,
         remarks: remarks.value.text,
         geoLocation: geoLocation.value.text,
@@ -139,8 +140,8 @@ class SitesController extends GetxController {
       HomePageController.instance.listOfSites.add(site!);
       isLoading(false);
       Get.offAllNamed(HomePage.routeName);
-      HomePageController.instance.lengthOfListOfSites.value =
-          HomePageController.instance.lengthOfListOfSites.value + 1;
+      HomePageController.instance.lengthOfSites.value =
+          HomePageController.instance.lengthOfSites.value + 1;
       Get.snackbar('Congrats!', 'Site is inserted.',
           backgroundColor: AppColors.blue, colorText: AppColors.white);
     } catch (e) {
@@ -168,7 +169,7 @@ class SitesController extends GetxController {
         contractorPhone: (contractorPhone.value.text),
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
-        siteType: typeOfSiteModifier.value?.siteTypeValue,
+        siteType: typeOfSiteModifier.value?.commonTypeValue,
         // mapLink: ,
         remarks: remarks.value.text,
         geoLocation: geoLocation.value.text,
@@ -225,7 +226,7 @@ class SitesController extends GetxController {
         cityModifier.value = citiesList
             .firstWhereOrNull((element) => element.cityName == site!.cityName);
         typeOfSiteModifier.value = typeOfSitesList.firstWhereOrNull(
-            (element) => element.siteTypeValue == site!.siteType);
+            (element) => element.commonTypeValue == site!.siteType);
         setCityValue(cityModifier.value);
         setSiteTypeValue(typeOfSiteModifier.value);
         geoLocation.value.text = site!.geoLocation!;
@@ -274,6 +275,7 @@ class SitesController extends GetxController {
   }
 
   getTypeOfPainters() async {
+    HomePageController.instance.searchSites('');
     typeOfPaintersList.clear();
     typeOfPaintersList
         .addAll(await SiteRepo.getTypeOfPaintersTypeData());
@@ -286,7 +288,7 @@ class SitesController extends GetxController {
     cityModifier.value = city;
   }
 
-  void setSiteTypeValue(SiteTypeModel? siteType) {
+  void setSiteTypeValue(CommonTypeModel? siteType) {
     typeOfSiteModifier.value = siteType;
   }
 

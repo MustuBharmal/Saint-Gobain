@@ -1,5 +1,5 @@
-import '../../models/typeOfCustomerModel.dart';
-import '../../site/model/common_model.dart';
+import '../../common_models/type_of_customer_model.dart';
+import '../../common_models/common_model.dart';
 
 class RetailOutletModel {
   String? dbType;
@@ -170,6 +170,7 @@ class RetailOutletModel {
     data['engagement'] = engagement;
     data['video_shown'] = videoShown;
     data['city_name'] = cityName;
+    data['deleted_images'] = image;
     return data;
   }
 }

@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
+import 'package:saint_gobain/presentation/naka_painters/binding/ran_painters_bindings.dart';
 
 import '../presentation/auth/auth_screen.dart';
 import '../presentation/auth/splash_screen.dart';
 import '../presentation/home/binding/homepage_bindings.dart';
 import '../presentation/home/home_page.dart';
+import '../presentation/naka_painters/add_ran_painter_screen.dart';
+import '../presentation/naka_painters/list_of_ran_painter_screen.dart';
 import '../presentation/retail_outlet/add_retail_outlet_screen.dart';
 import '../presentation/retail_outlet/binding/retail_outlet_bindings.dart';
 import '../presentation/retail_outlet/list_of_retail_outlet_screen.dart';
@@ -35,5 +38,13 @@ class AppRoutes {
         name: AddRetailOutletScreen.routeName,
         page: () => AddRetailOutletScreen(),
         binding: RetailOutletBinding()),
+    GetPage(
+        name: ListOfRanPainterScreen.routeName,
+        page: () => const ListOfRanPainterScreen(),
+        binding: RanPainterBinding()),
+    GetPage(
+        name: AddRanPainterScreen.routeName,
+        page: () => AddRanPainterScreen(),
+        binding: RanPainterBinding()),
   ];
 }

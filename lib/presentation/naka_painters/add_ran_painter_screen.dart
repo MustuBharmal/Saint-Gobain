@@ -5,27 +5,24 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
-import '../common_models/type_of_customer_model.dart';
-import '../common_models/common_model.dart';
-import '../widgets/add_item_button.dart';
+import '../common_models/common_type_models.dart';
 import '../widgets/custom_radio_widget.dart';
-import '../widgets/customers_adding_widget.dart';
-import './controller/retail_outlet_controller.dart';
+import './controller/ran_painter_controller.dart';
 
-class AddRetailOutletScreen extends GetView<RetailOutletController> {
-  AddRetailOutletScreen({super.key});
+class AddRanPainterScreen extends GetView<RanPainterController> {
+  AddRanPainterScreen({super.key});
 
-  static const routeName = '/add-retail-outlet';
+  static const routeName = '/add-naka-screen';
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Get.arguments != null ? controller.editOutlet() : controller.clear();
+    Get.arguments != null ? controller.editPainter() : controller.clear();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: appBarWidget(
         title:
-            Get.arguments != null ? "Edit Retail Outlet" : "Add Retail Outlet",
+            Get.arguments != null ? "Edit Naka Painter" : "Add Naka Painter",
         leading: const Icon(CupertinoIcons.arrow_left),
       ),
       body: Obx(() => (controller.isLoading.value ||
@@ -45,7 +42,65 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         myText(
-                            text: "Outlet name",
+                            text: "Select painter type",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        DropdownButtonFormField<CommonTypeModel>(
+                          validator: (CommonTypeModel? input) {
+                            if (input?.commonTypeValue == null) {
+                              Get.snackbar('Warning', 'Select painter type',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                          isExpanded: true,
+                          menuMaxHeight: 500,
+                          elevation: 16,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.black,
+                          ),
+                          decoration: InputDecoration(
+                            contentPadding:
+                            const EdgeInsets.only(top: 5, left: 20),
+                            errorStyle: const TextStyle(fontSize: 0),
+                            hintStyle: TextStyle(
+                              color: AppColors.genderTextColor,
+                            ),
+                            hintText: ' -select- ',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          value: controller.typeOfPainterModifier.value,
+                          onChanged: controller.setSiteTypeValue,
+                          items: controller.typeOfPaintersList
+                              .map<DropdownMenuItem<CommonTypeModel>>(
+                                  (CommonTypeModel value) {
+                                return DropdownMenuItem<CommonTypeModel>(
+                                  value: value,
+                                  child: Text(
+                                    value.commonTypeValue ?? '-',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xffA6A6A6),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                        ),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+
+                        myText(
+                            text: "Painter name",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(
@@ -53,7 +108,7 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                         ),
                         myTextField(
                           text: "Name",
-                          controller: controller.outletName.value,
+                          controller: controller.painterName.value,
                           validator: (String input) {
                             if (input.isEmpty) {
                               Get.snackbar('Warning', 'Name is required.',
@@ -65,47 +120,7 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                           },
                         ),
                         myText(
-                            text: "Outlet Address",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 18)),
-                        SizedBox(
-                          height: Get.height * dropSize,
-                        ),
-                        myTextField(
-                          text: "Address",
-                          controller: controller.outletAddress.value,
-                          validator: (String input) {
-                            if (input.isEmpty) {
-                              Get.snackbar('Warning', 'Address is required.',
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue);
-                              return '';
-                            }
-                            return null;
-                          },
-                        ),
-                        myText(
-                            text: "Outlet owner name",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 18)),
-                        SizedBox(
-                          height: Get.height * dropSize,
-                        ),
-                        myTextField(
-                          text: "Name",
-                          controller: controller.outletOwner.value,
-                          validator: (String input) {
-                            if (input.isEmpty) {
-                              Get.snackbar('Warning', 'Name is required.',
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue);
-                              return '';
-                            }
-                            return null;
-                          },
-                        ),
-                        myText(
-                            text: "Outlet phone number",
+                            text: "Painter phone number",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(
@@ -113,7 +128,7 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                         ),
                         myTextField(
                           text: "Phone Number",
-                          controller: controller.outletPhone.value,
+                          controller: controller.painterPhone.value,
                           textInputType: TextInputType.phone,
                           maxLength: 10,
                           validator: (String input) {
@@ -166,75 +181,9 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                                   return null;
                                 },
                               ),
-                        myText(
-                            text: "Select Outlet City",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w400, fontSize: 18)),
-                        SizedBox(
-                          height: Get.height * dropSize,
-                        ),
-                        DropdownButtonFormField<CityModel>(
-                          validator: (CityModel? input) {
-                            if (input?.cityName == null) {
-                              Get.snackbar('Warning', 'Select your city.',
-                                  colorText: Colors.white,
-                                  backgroundColor: Colors.blue);
-                              return '';
-                            }
-                            return null;
-                          },
-                          isExpanded: true,
-                          menuMaxHeight: 500,
-                          elevation: 16,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.black,
-                          ),
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 5, left: 20),
-                            errorStyle: const TextStyle(fontSize: 0),
-                            hintStyle: TextStyle(
-                              color: AppColors.genderTextColor,
-                            ),
-                            hintText: ' -select- ',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          value: controller.cityModifier.value,
-                          onChanged: controller.setCityValue,
-                          items: controller.citiesList
-                              .map<DropdownMenuItem<CityModel>>(
-                                  (CityModel value) {
-                            return DropdownMenuItem<CityModel>(
-                              value: value,
-                              child: Text(
-                                value.cityName ?? '-',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xffA6A6A6),
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: Get.height * size,
-                        ),
-                        RadioButtonWidget(
-                            radioButtonValue: controller.sampling,
-                            titleText:'Is sampling completed?',
-                            onPressFun: (value) {
-                              controller.sampling.value = value;
-                            }),
-                        SizedBox(
-                          height: Get.height * dropSize,
-                        ),
                         RadioButtonWidget(
                             radioButtonValue: controller.engagement,
-                            titleText:'Was there engagement?',
+                            titleText: 'Was there engagement?',
                             onPressFun: (value) {
                               controller.engagement.value = value;
                             }),
@@ -243,7 +192,7 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                         ),
                         RadioButtonWidget(
                             radioButtonValue: controller.videoShown,
-                            titleText:'Is video shown?',
+                            titleText: 'Is video shown?',
                             onPressFun: (value) {
                               controller.videoShown.value = value;
                             }),
@@ -264,35 +213,20 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                             return null;
                           },
                         ),
-                        if (Get.arguments == null)
-                          AddItemButton(
-                            onTapFun: () {
-                              controller.selectedCustomerList.add(Customers());
-                            },
-                            buttonText: 'Add Customers',
-                          )
-                        else
-                          AddItemButton(
-                            onTapFun: () {
-                              controller.uploadedCustomerList.add(Customers());
-                            },
-                            buttonText: 'Add Customers',
-                          ),
+                        myText(
+                            text: "Remarks",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
-                        if (Get.arguments == null)
-                          CustomersAddingWidget(
-                            uploadedCustomerList:
-                                controller.selectedCustomerList.value,
-                            typeOfCustomList: controller.typeOfCustomerListSec,
-                          )
-                        else
-                          CustomersAddingWidget(
-                            uploadedCustomerList:
-                                controller.uploadedCustomerList.value,
-                            typeOfCustomList: controller.typeOfCustomerListSec,
-                          ),
+                        myTextField(
+                          text: "Remarks",
+                          controller: controller.remarks.value,
+                          validator: (String input) {
+                            return null;
+                          },
+                        ),
                         if (Get.arguments == null)
                           Wrap(
                             children: [
@@ -461,8 +395,8 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                                     width: Get.width * 0.5,
                                     child: elevatedButton(
                                       text: Get.arguments != null
-                                          ? "Edit Retail Outlet"
-                                          : "Add Retail Outlet",
+                                          ? "Edit Painter"
+                                          : "Add Painter",
                                       onPress: () {
                                         // controller.uploadImage();
                                         // return;
@@ -473,8 +407,8 @@ class AddRetailOutletScreen extends GetView<RetailOutletController> {
                                             return;
                                           }*/
                                         Get.arguments != null
-                                            ? controller.updateOutlet()
-                                            : controller.insertOutlet();
+                                            ? controller.updatePainter()
+                                            : controller.insertPainter();
                                       },
                                     ),
                                   ),

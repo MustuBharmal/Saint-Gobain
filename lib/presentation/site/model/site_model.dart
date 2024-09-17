@@ -1,5 +1,6 @@
-import '../../models/typeOfCustomerModel.dart';
-import 'common_model.dart';
+
+import '../../common_models/type_of_customer_model.dart';
+import '../../common_models/common_model.dart';
 
 class SiteModel {
   String? dbType;

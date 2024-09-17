@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../naka_painters/model/ran_painter_model.dart';
 import '../../retail_outlet/model/retail_outlet_model.dart';
-import '../../site/model/common_model.dart';
+import '../../common_models/common_model.dart';
 import '../../site/model/site_model.dart';
 import '../repo/homepage_repo.dart';
 
 class HomePageController extends GetxController {
   static HomePageController get instance => Get.find<HomePageController>();
   Rx<bool> switchBool = Rx(false);
-  RxInt lengthOfListOfSites = RxInt(0);
-  RxInt lengthOfListOfStudents = RxInt(0);
-  final List<SiteModel> _allSites = [];
+  RxInt lengthOfSites = RxInt(0);
+  RxInt lengthOfOutlets = RxInt(0);
+  RxInt lengthOfRanPainters = RxInt(0);
   RxList<SiteModel> listOfSites = RxList.empty();
-  RxList<CityModel> citiesList = RxList.empty();
-
-  final List<RetailOutletModel> _allRetailOutlets = [];
   RxList<RetailOutletModel> listOfRetailOutlets = RxList.empty();
+  RxList<RanPainterModel> listOfRanPainters = RxList.empty();
+  final List<SiteModel> _allSites = [];
+  final List<RetailOutletModel> _allRetailOutlets = [];
+  final List<RanPainterModel> _allRanPainters = [];
   var isLoading = false.obs;
+  RxList<CityModel> citiesList = RxList.empty();
 
   /*RxList<CityModel> citiesList = RxList.empty();
   RxList<QuestionModel> questionsList = RxList.empty();*/
@@ -87,11 +90,17 @@ class HomePageController extends GetxController {
       listOfSites.clear();
       _allSites.addAll(await HomePageRepo.getListOfSites());
       listOfSites.addAll(_allSites);
-      lengthOfListOfSites.value = listOfSites.length;
+      lengthOfSites.value = listOfSites.length;
+      _allRanPainters.clear();
+      listOfRanPainters.clear();
+      _allRanPainters.addAll(await HomePageRepo.getListOfRanPainters());
+      listOfRanPainters.addAll(_allRanPainters);
+      lengthOfRanPainters.value = listOfRanPainters.length;
       _allRetailOutlets.clear();
+      listOfRetailOutlets.clear();
       _allRetailOutlets.addAll(await HomePageRepo.getListOfRetailOutlets());
       listOfRetailOutlets.addAll(_allRetailOutlets);
-      lengthOfListOfStudents.value = listOfRetailOutlets.length;
+      lengthOfOutlets.value = listOfRetailOutlets.length;
     } catch (e) {
       Get.snackbar('Error', 'Please try again later.',
           colorText: Colors.white, backgroundColor: Colors.blue);
@@ -101,7 +110,7 @@ class HomePageController extends GetxController {
     isLoading(false);
   }
 
-  searchColleges(String query) {
+  searchSites(String query) {
     if (query == '') {
       listOfSites.clear();
       listOfSites.addAll(_allSites);
@@ -109,6 +118,28 @@ class HomePageController extends GetxController {
       listOfSites.clear();
       listOfSites.addAll(_allSites.where((element) =>
           element.contractorName?.toLowerCase().contains(query.toLowerCase()) ??
+          false));
+    }
+  }
+  searchOutlets(String query) {
+    if (query == '') {
+      listOfRetailOutlets.clear();
+      listOfRetailOutlets.addAll(_allRetailOutlets);
+    } else {
+      listOfRetailOutlets.clear();
+      listOfRetailOutlets.addAll(_allRetailOutlets.where((element) =>
+      element.outletName?.toLowerCase().contains(query.toLowerCase()) ??
+          false));
+    }
+  }
+  searchPainters(String query) {
+    if (query == '') {
+      listOfRanPainters.clear();
+      listOfRanPainters.addAll(_allRanPainters);
+    } else {
+      listOfRanPainters.clear();
+      listOfRanPainters.addAll(_allRanPainters.where((element) =>
+      element.painterName?.toLowerCase().contains(query.toLowerCase()) ??
           false));
     }
   }

@@ -5,12 +5,13 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/constant/global_variables.dart';
 import '../../core/style/app_color.dart';
 import '../../widgets/general_widgets.dart';
-import '../models/typeOfCustomerModel.dart';
+import '../common_models/common_type_models.dart';
+import '../common_models/type_of_customer_model.dart';
 import '../widgets/add_item_button.dart';
 import '../widgets/custom_radio_widget.dart';
 import '../widgets/painters_adding_widget.dart';
 import './controller/site_controller.dart';
-import 'model/common_model.dart';
+import '../common_models/common_model.dart';
 
 class AddSiteScreen extends GetView<SitesController> {
   AddSiteScreen({super.key});
@@ -230,9 +231,9 @@ class AddSiteScreen extends GetView<SitesController> {
                         SizedBox(
                           height: Get.height * dropSize,
                         ),
-                        DropdownButtonFormField<SiteTypeModel>(
-                          validator: (SiteTypeModel? input) {
-                            if (input?.siteTypeValue == null) {
+                        DropdownButtonFormField<CommonTypeModel>(
+                          validator: (CommonTypeModel? input) {
+                            if (input?.commonTypeValue == null) {
                               Get.snackbar('Warning', 'Select Site Type.',
                                   colorText: Colors.white,
                                   backgroundColor: Colors.blue);
@@ -262,12 +263,12 @@ class AddSiteScreen extends GetView<SitesController> {
                           value: controller.typeOfSiteModifier.value,
                           onChanged: controller.setSiteTypeValue,
                           items: controller.typeOfSitesList
-                              .map<DropdownMenuItem<SiteTypeModel>>(
-                                  (SiteTypeModel value) {
-                            return DropdownMenuItem<SiteTypeModel>(
+                              .map<DropdownMenuItem<CommonTypeModel>>(
+                                  (CommonTypeModel value) {
+                            return DropdownMenuItem<CommonTypeModel>(
                               value: value,
                               child: Text(
-                                value.siteTypeValue ?? '-',
+                                value.commonTypeValue ?? '-',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
