@@ -113,10 +113,10 @@ class HomePageController extends GetxController {
   searchSites(String query) {
     if (query == '') {
       listOfSites.clear();
-      listOfSites.addAll(_allSites);
+      listOfSites.addAll(_allSites.reversed);
     } else {
       listOfSites.clear();
-      listOfSites.addAll(_allSites.where((element) =>
+      listOfSites.addAll(_allSites.reversed.where((element) =>
           element.contractorName?.toLowerCase().contains(query.toLowerCase()) ??
           false));
     }
@@ -124,10 +124,10 @@ class HomePageController extends GetxController {
   searchOutlets(String query) {
     if (query == '') {
       listOfRetailOutlets.clear();
-      listOfRetailOutlets.addAll(_allRetailOutlets);
+      listOfRetailOutlets.addAll(_allRetailOutlets.reversed);
     } else {
       listOfRetailOutlets.clear();
-      listOfRetailOutlets.addAll(_allRetailOutlets.where((element) =>
+      listOfRetailOutlets.addAll(_allRetailOutlets.reversed.where((element) =>
       element.outletName?.toLowerCase().contains(query.toLowerCase()) ??
           false));
     }
@@ -135,10 +135,10 @@ class HomePageController extends GetxController {
   searchPainters(String query) {
     if (query == '') {
       listOfRanPainters.clear();
-      listOfRanPainters.addAll(_allRanPainters);
+      listOfRanPainters.addAll(_allRanPainters.reversed);
     } else {
       listOfRanPainters.clear();
-      listOfRanPainters.addAll(_allRanPainters.where((element) =>
+      listOfRanPainters.addAll(_allRanPainters.reversed.where((element) =>
       element.painterName?.toLowerCase().contains(query.toLowerCase()) ??
           false));
     }

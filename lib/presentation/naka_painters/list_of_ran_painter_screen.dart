@@ -22,7 +22,7 @@ class ListOfRanPainterScreen extends GetView<RanPainterController> {
     ranPainter = HomePageController.instance.listOfRanPainters;
     return Scaffold(
       appBar: appBarWidget(
-        title: ('List of Painters'),
+        title: ('Naka List'),
         actions: [
           IconButton(
             onPressed: () {

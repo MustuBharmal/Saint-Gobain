@@ -188,7 +188,7 @@ class HomePage extends GetView<HomePageController> {
             HomeScreenCard(
               color: Colors.lightGreen,
               imageFile: 'assets/images/interested.png',
-              label: "Painters",
+              label: "Naka List",
               onTap: () {
                 Get.toNamed(ListOfRanPainterScreen.routeName);
               },

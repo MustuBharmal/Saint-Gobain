@@ -22,7 +22,7 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
       backgroundColor: Colors.white,
       appBar: appBarWidget(
         title:
-            Get.arguments != null ? "Edit Naka Painter" : "Add Naka Painter",
+            Get.arguments != null ? "Edit Naka activity" : "Add Naka activity",
         leading: const Icon(CupertinoIcons.arrow_left),
       ),
       body: Obx(() => (controller.isLoading.value ||
@@ -395,8 +395,8 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
                                     width: Get.width * 0.5,
                                     child: elevatedButton(
                                       text: Get.arguments != null
-                                          ? "Edit Painter"
-                                          : "Add Painter",
+                                          ? "Edit naka activity"
+                                          : "Add naka activity",
                                       onPress: () {
                                         // controller.uploadImage();
                                         // return;
