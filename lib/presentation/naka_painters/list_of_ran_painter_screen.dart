@@ -62,14 +62,14 @@ class ListOfRanPainterScreen extends GetView<RanPainterController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: SearchBar(
-                        elevation: MaterialStateProperty.all(2),
+                        elevation: WidgetStateProperty.all(2),
                         backgroundColor:
-                            MaterialStateProperty.all(AppColors.white),
+                        WidgetStateProperty.all(AppColors.white),
                         surfaceTintColor:
-                            MaterialStateProperty.all(AppColors.white),
+                        WidgetStateProperty.all(AppColors.white),
                         // textInputAction: TextInputAction.done,
                         leading: const Icon(Icons.search),
-                        hintText: 'Search painter',
+                        hintText: 'Search naka',
                         onChanged: HomePageController.instance.searchPainters,
                       ),
                     ),
@@ -77,7 +77,7 @@ class ListOfRanPainterScreen extends GetView<RanPainterController> {
                       const Expanded(
                         child: Center(
                           child: Text(
-                            'No painters available',
+                            'No naka available',
                             style: TextStyle(color: Colors.black, fontSize: 25),
                           ),
                         ),

@@ -114,7 +114,8 @@ class RanPainterController extends GetxController {
         }
       }
       ranPainter?.images = imageList;
-      HomePageController.instance.listOfRanPainters.add(ranPainter!);
+      HomePageController.instance.updatingRan(ranPainter!);
+      HomePageController.instance.listOfRanPainters.insert(0,ranPainter!);
       isLoading(false);
       Get.offAllNamed(HomePage.routeName);
       HomePageController.instance.lengthOfSites.value =
@@ -140,6 +141,7 @@ class RanPainterController extends GetxController {
         companyId: AuthController.instance.user?.companyId,
         painterName: painterName.value.text,
         painterPhone: (painterPhone.value.text),
+        painterType: typeOfPainterModifier.value!.commonTypeValue,
         // mapLink: ,
         giveaways: giveaways.value.text,
         geolocation: geoLocation.value.text,
@@ -171,7 +173,8 @@ class RanPainterController extends GetxController {
       }
       ranPainter?.images = imageList;
       LogUtil.debug(ranPainter?.toJson());
-      HomePageController.instance.listOfRanPainters.add(ranPainter!);
+      HomePageController.instance.updatingRan(ranPainter!);
+      HomePageController.instance.listOfRanPainters.insert(0,ranPainter!);
       isLoading(false);
       Dialogs.showSnackBar(Get.context, "Naka painter updated");
 

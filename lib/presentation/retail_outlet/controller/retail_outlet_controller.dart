@@ -131,7 +131,9 @@ class RetailOutletController extends GetxController {
         }
       }
       outlet?.images = imageList;
-      HomePageController.instance.listOfRetailOutlets.add(outlet!);
+
+      HomePageController.instance.updatingOutlets(outlet!);
+      HomePageController.instance.listOfRetailOutlets.insert(0, outlet!);
       isLoading(false);
       Get.offAllNamed(HomePage.routeName);
       HomePageController.instance.lengthOfSites.value =
@@ -196,7 +198,8 @@ class RetailOutletController extends GetxController {
       outlet?.customers = customersList;
       outlet?.images = imageList;
       LogUtil.debug(outlet?.toJson());
-      HomePageController.instance.listOfRetailOutlets.add(outlet!);
+      HomePageController.instance.updatingOutlets(outlet!);
+      HomePageController.instance.listOfRetailOutlets.insert(0, outlet!);
       isLoading(false);
       Dialogs.showSnackBar(Get.context, "Retail outlet updated");
 

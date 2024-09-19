@@ -214,7 +214,7 @@ Widget elevatedButton(
     {required String text, Function? onPress, double fontSize = 18}) {
   return ElevatedButton(
     style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(AppColors.blue),
+      backgroundColor: WidgetStateProperty.all<Color>(AppColors.blue),
     ),
     onPressed: () {
       onPress!();

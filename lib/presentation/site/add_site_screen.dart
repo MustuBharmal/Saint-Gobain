@@ -45,6 +45,70 @@ class AddSiteScreen extends GetView<SitesController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         myText(
+                            text: "Retailer Name",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        myTextField(
+                          text: "Name",
+                          controller: controller.retailerName.value,
+                          validator: (String input) {
+                            if (input.isEmpty) {
+                              Get.snackbar(
+                                  'Warning', 'Contractor name is required.',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                        ),
+                        myText(
+                            text: "Retailer Phone Number",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        myTextField(
+                          text: "Phone Number",
+                          controller: controller.retailerPhone.value,
+                          textInputType: TextInputType.phone,
+                          maxLength: 10,
+                          validator: (String input) {
+                            if (input.isEmpty) {
+                              Get.snackbar(
+                                  'Warning', 'Phone Number is required.',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                        ),
+                        myText(
+                            text: "Retailer Address",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        myTextField(
+                          text: "Address",
+                          controller: controller.retailerAddress.value,
+                          validator: (String input) {
+                            if (input.isEmpty) {
+                              Get.snackbar('Warning', 'Address is required.',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                        ),
+                        myText(
                             text: "Contractor Name",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),

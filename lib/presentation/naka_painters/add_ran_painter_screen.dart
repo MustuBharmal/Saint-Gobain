@@ -42,7 +42,7 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         myText(
-                            text: "Select painter type",
+                            text: "Select naka type",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(
@@ -51,7 +51,7 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
                         DropdownButtonFormField<CommonTypeModel>(
                           validator: (CommonTypeModel? input) {
                             if (input?.commonTypeValue == null) {
-                              Get.snackbar('Warning', 'Select painter type',
+                              Get.snackbar('Warning', 'Select naka type',
                                   colorText: Colors.white,
                                   backgroundColor: Colors.blue);
                               return '';
@@ -100,7 +100,7 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
                         ),
 
                         myText(
-                            text: "Painter name",
+                            text: "Naka name",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(
@@ -120,7 +120,7 @@ class AddRanPainterScreen extends GetView<RanPainterController> {
                           },
                         ),
                         myText(
-                            text: "Painter phone number",
+                            text: "Naka phone number",
                             style: const TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18)),
                         SizedBox(

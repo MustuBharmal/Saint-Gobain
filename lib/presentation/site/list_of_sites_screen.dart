@@ -64,11 +64,11 @@ class ListOfSitesScreen extends GetView<SitesController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: SearchBar(
-                        elevation: MaterialStateProperty.all(2),
+                        elevation: WidgetStateProperty.all(2),
                         backgroundColor:
-                            MaterialStateProperty.all(AppColors.white),
+                            WidgetStateProperty.all(AppColors.white),
                         surfaceTintColor:
-                            MaterialStateProperty.all(AppColors.white),
+                            WidgetStateProperty.all(AppColors.white),
                         // textInputAction: TextInputAction.done,
                         leading: const Icon(Icons.search),
                         hintText: 'Search Sites',

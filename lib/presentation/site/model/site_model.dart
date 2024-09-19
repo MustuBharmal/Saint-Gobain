@@ -19,6 +19,10 @@ class SiteModel {
   int? sampling;
   int? engagement;
   int? videoShown;
+  String? retailerName;
+  String? retailerPhone;
+  String? retailerAddress;
+  String? additionalActivity;
   String? giveAWays;
   List<Customers>? painters;
   String? createdBy;
@@ -48,6 +52,10 @@ class SiteModel {
       this.sampling,
       this.engagement,
       this.videoShown,
+        this.retailerName,
+        this.retailerPhone,
+        this.retailerAddress,
+        this.additionalActivity,
       this.createdBy,
       this.createdAt,
       this.updatedBy,
@@ -78,6 +86,10 @@ class SiteModel {
     int? sampling = json['sampling'];
     int? engagement = json['engagement'];
     int? videoShown = json['video_shown'];
+    String? retailerName = json['retailer_name'];
+    String? retailerPhone = json['retailer_phone'];
+    String? retailerAddress = json['retailer_address'];
+    String? additionalActivity = json['additional_activity'];
     String? createdBy = json['created_by'] ?? '';
     String? createdAt = json['created_at'] ?? '';
     String? updatedBy = json['updated_by'] ?? '';
@@ -107,6 +119,10 @@ class SiteModel {
       sampling: sampling,
       engagement: engagement,
       videoShown: videoShown,
+      retailerName: retailerName,
+      retailerPhone: retailerPhone,
+      retailerAddress: retailerAddress,
+      additionalActivity: additionalActivity,
       createdBy: createdBy,
       createdAt: createdAt,
       updatedBy: updatedBy,
@@ -141,6 +157,10 @@ class SiteModel {
     data['sampling'] = sampling;
     data['engagement'] = engagement;
     data['video_shown'] = videoShown;
+    data['retailer_name']=retailerName;
+    data['retailer_phone']=retailerPhone;
+    data['retailer_address']=retailerAddress;
+    data['additional_activity']=additionalActivity;
     data['created_by'] = createdBy;
     data['created_at'] = createdAt;
     data['updated_by'] = updatedBy;
@@ -178,6 +198,10 @@ class SiteModel {
     data['sampling'] = sampling;
     data['engagement'] = engagement;
     data['video_shown'] = videoShown;
+    data['retailer_name']=retailerName;
+    data['retailer_phone']=retailerPhone;
+    data['retailer_address']=retailerAddress;
+    data['additional_activity']=additionalActivity;
     data['created_by'] = createdBy;
     data['created_at'] = createdAt;
     data['updated_by'] = updatedBy;

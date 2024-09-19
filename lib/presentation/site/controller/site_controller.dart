@@ -20,6 +20,9 @@ import '../model/site_model.dart';
 import '../repo/site_repo.dart';
 
 class SitesController extends GetxController {
+  Rx<TextEditingController> retailerName = TextEditingController().obs;
+  Rx<TextEditingController> retailerPhone = TextEditingController().obs;
+  Rx<TextEditingController> retailerAddress = TextEditingController().obs;
   Rx<TextEditingController> contractorName = TextEditingController().obs;
   Rx<TextEditingController> contractorPhone = TextEditingController().obs;
   Rx<TextEditingController> siteAddress = TextEditingController().obs;
@@ -63,6 +66,9 @@ class SitesController extends GetxController {
   }
 
   void clear() {
+    retailerName.value.text = '';
+    retailerPhone.value.text = '';
+    retailerAddress.value.text = '';
     contractorName.value.text = '';
     contractorPhone.value.text = '';
     contractorAddress.value.text = '';
@@ -82,6 +88,9 @@ class SitesController extends GetxController {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    retailerName.value.dispose();
+    retailerPhone.value.dispose();
+    retailerAddress.value.dispose();
     contractorName.value.dispose();
     contractorPhone.value.dispose();
     contractorAddress.value.dispose();
@@ -104,6 +113,9 @@ class SitesController extends GetxController {
       site = SiteModel(
         dbType: "insertSite",
         companyId: AuthController.instance.user?.companyId,
+        retailerName: retailerName.value.text,
+        retailerPhone: retailerPhone.value.text,
+        retailerAddress: retailerAddress.value.text,
         contractorName: contractorName.value.text,
         contractorPhone: (contractorPhone.value.text),
         contractorAddress: contractorAddress.value.text,
@@ -137,6 +149,7 @@ class SitesController extends GetxController {
         }
       }
       site?.images = imageList;
+      HomePageController.instance.updatingSites(site!);
       HomePageController.instance.listOfSites.add(site!);
       isLoading(false);
       Get.offAllNamed(HomePage.routeName);
@@ -164,6 +177,9 @@ class SitesController extends GetxController {
         dbType: "updateSite",
         siteId: site!.siteId,
         companyId: AuthController.instance.user?.companyId,
+        retailerName: retailerName.value.text,
+        retailerPhone: retailerPhone.value.text,
+        retailerAddress: retailerAddress.value.text,
         contractorName: contractorName.value.text,
         contractorAddress: contractorAddress.value.text,
         contractorPhone: (contractorPhone.value.text),
@@ -203,10 +219,10 @@ class SitesController extends GetxController {
       site?.painters = paintersList;
       site?.images = imageList;
       LogUtil.debug(site?.toJson());
-      HomePageController.instance.listOfSites.add(site!);
+      HomePageController.instance.updatingSites(site!);
+      HomePageController.instance.listOfSites.insert(0, site!);
       isLoading(false);
       Dialogs.showSnackBar(Get.context, "Site updated");
-
       Get.back();
     } catch (e) {
       isLoading(false);
@@ -220,6 +236,9 @@ class SitesController extends GetxController {
     site = Get.arguments;
     try {
       if (site != null) {
+        retailerName.value.text = site!.retailerName ?? '';
+        retailerAddress.value.text = site!.retailerAddress ?? '';
+        retailerPhone.value.text = site!.retailerPhone.toString();
         contractorName.value.text = site!.contractorName ?? '';
         contractorAddress.value.text = site!.contractorAddress ?? '';
         contractorPhone.value.text = site!.contractorPhone.toString();

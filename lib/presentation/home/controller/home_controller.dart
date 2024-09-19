@@ -22,9 +22,6 @@ class HomePageController extends GetxController {
   var isLoading = false.obs;
   RxList<CityModel> citiesList = RxList.empty();
 
-  /*RxList<CityModel> citiesList = RxList.empty();
-  RxList<QuestionModel> questionsList = RxList.empty();*/
-
   @override
   void onInit() {
     // TODO: implement onInit
@@ -89,7 +86,7 @@ class HomePageController extends GetxController {
       _allSites.clear();
       listOfSites.clear();
       _allSites.addAll(await HomePageRepo.getListOfSites());
-      listOfSites.addAll(_allSites);
+      listOfSites.addAll(_allSites.reversed);
       lengthOfSites.value = listOfSites.length;
       _allRanPainters.clear();
       listOfRanPainters.clear();
@@ -110,6 +107,10 @@ class HomePageController extends GetxController {
     isLoading(false);
   }
 
+  updatingSites(SiteModel site){
+    _allSites.add(site);
+  }
+
   searchSites(String query) {
     if (query == '') {
       listOfSites.clear();
@@ -121,6 +122,11 @@ class HomePageController extends GetxController {
           false));
     }
   }
+
+  updatingOutlets(RetailOutletModel outlets){
+    _allRetailOutlets.add(outlets);
+  }
+
   searchOutlets(String query) {
     if (query == '') {
       listOfRetailOutlets.clear();
@@ -132,6 +138,11 @@ class HomePageController extends GetxController {
           false));
     }
   }
+
+  updatingRan(RanPainterModel ran){
+    _allRanPainters.add(ran);
+  }
+
   searchPainters(String query) {
     if (query == '') {
       listOfRanPainters.clear();

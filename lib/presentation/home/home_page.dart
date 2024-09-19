@@ -22,7 +22,10 @@ class HomePage extends GetView<HomePageController> {
       appBar: appBarWidget(
         title: 'Dashboard',
         actions: [
-          appVersion(),
+          myText(
+              text:
+              AuthController.instance.user!.name!.toUpperCase(),
+              style: subtitleStyle2),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
@@ -37,6 +40,8 @@ class HomePage extends GetView<HomePageController> {
           )
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: appVersion(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -155,7 +160,7 @@ class HomePage extends GetView<HomePageController> {
                             ),
                           ),
                           myText(
-                              text: 'Painters',
+                              text: 'Naka',
                               style: TextStyle(color: AppColors.black))
                         ],
                       ),

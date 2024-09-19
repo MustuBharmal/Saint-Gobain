@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saint_gobain/presentation/naka_painters/add_ran_painter_screen.dart';
 
 import '../../core/style/app_color.dart';
 import '../../core/style/styles.dart';
+import '../naka_painters/add_ran_painter_screen.dart';
 import '../naka_painters/model/ran_painter_model.dart';
-import '../retail_outlet/add_retail_outlet_screen.dart';
 
 class RanPainterScreenCard extends StatelessWidget {
   final RanPainterModel painter;
@@ -68,7 +67,7 @@ class RanPainterScreenCard extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     children: [
-                      TextSpan(text: ('Painter Address:- '), style: subtitleStyle),
+                      TextSpan(text: ('Naka Address:- '), style: subtitleStyle),
                       TextSpan(text: painter.geolocation, style: subtitleStyle2),
                     ],
                   ),
