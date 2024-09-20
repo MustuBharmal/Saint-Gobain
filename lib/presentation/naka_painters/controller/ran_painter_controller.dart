@@ -120,7 +120,7 @@ class RanPainterController extends GetxController {
       Get.offAllNamed(HomePage.routeName);
       HomePageController.instance.lengthOfSites.value =
           HomePageController.instance.lengthOfSites.value + 1;
-      Get.snackbar('Congrats!', 'Naka painter is inserted.',
+      Get.snackbar('Congrats!', 'Naka activity is inserted.',
           backgroundColor: AppColors.blue, colorText: AppColors.white);
     } catch (e) {
       isLoading(false);
@@ -176,7 +176,7 @@ class RanPainterController extends GetxController {
       HomePageController.instance.updatingRan(ranPainter!);
       HomePageController.instance.listOfRanPainters.insert(0,ranPainter!);
       isLoading(false);
-      Dialogs.showSnackBar(Get.context, "Naka painter updated");
+      Dialogs.showSnackBar(Get.context, "Naka activity updated");
 
       Get.back();
     } catch (e) {

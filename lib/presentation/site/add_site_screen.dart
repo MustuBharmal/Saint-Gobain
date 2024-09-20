@@ -285,6 +285,27 @@ class AddSiteScreen extends GetView<SitesController> {
                                   return null;
                                 },
                               ),
+                        myText(
+                            text: "Additional activity",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 18)),
+                        SizedBox(
+                          height: Get.height * dropSize,
+                        ),
+                        myTextField(
+                          text: "Activity",
+                          controller: controller.additionalActivity.value,
+                          maxLines: 4,
+                          validator: (String input) {
+                            if (input.isEmpty) {
+                              Get.snackbar('Warning', 'Additional is required.',
+                                  colorText: Colors.white,
+                                  backgroundColor: Colors.blue);
+                              return '';
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(
                           height: Get.height * dropSize,
                         ),

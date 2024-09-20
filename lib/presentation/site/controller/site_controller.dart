@@ -30,6 +30,7 @@ class SitesController extends GetxController {
   Rx<TextEditingController> remarks = TextEditingController().obs;
   Rx<TextEditingController> geoLocation = TextEditingController().obs;
   Rx<TextEditingController> giveaways = TextEditingController().obs;
+  Rx<TextEditingController> additionalActivity = TextEditingController().obs;
   RxList<CityModel> citiesList = RxList.empty();
   RxList<CommonTypeModel> typeOfSitesList = RxList.empty();
   RxList<SiteModel> sitesList = RxList.empty();
@@ -76,6 +77,7 @@ class SitesController extends GetxController {
     remarks.value.text = '';
     geoLocation.value.text = '';
     giveaways.value.text = '';
+    additionalActivity.value.text = '';
     cityModifier.value = null;
     typeOfSiteModifier.value = null;
     sampling = RxString('No');
@@ -98,6 +100,7 @@ class SitesController extends GetxController {
     remarks.value.dispose();
     geoLocation.value.dispose();
     giveaways.value.dispose();
+    additionalActivity.value.dispose();
   }
 
   Future<String> uploadImage(
@@ -130,6 +133,7 @@ class SitesController extends GetxController {
         sampling: sampling.value == "Yes" ? 1 : 0,
         engagement: engagement.value == "Yes" ? 1 : 0,
         videoShown: videoShown.value == "Yes" ? 1 : 0,
+        additionalActivity: additionalActivity.value.text,
         giveAWays: giveaways.value.text,
         painters: selectedPaintersList,
         createdBy: AuthController.instance.user!.name ?? "",
@@ -186,6 +190,7 @@ class SitesController extends GetxController {
         siteCityId: cityModifier.value?.cityId ?? 1,
         siteAddress: siteAddress.value.text,
         siteType: typeOfSiteModifier.value?.commonTypeValue,
+        additionalActivity: additionalActivity.value.text,
         // mapLink: ,
         remarks: remarks.value.text,
         geoLocation: geoLocation.value.text,
@@ -249,6 +254,7 @@ class SitesController extends GetxController {
         setCityValue(cityModifier.value);
         setSiteTypeValue(typeOfSiteModifier.value);
         geoLocation.value.text = site!.geoLocation!;
+        additionalActivity.value.text = site!.additionalActivity ?? '';
         sampling.value = site?.sampling == 1 ? "Yes" : "No";
         engagement.value = site?.engagement == 1 ? "Yes" : "No";
         videoShown.value = site?.videoShown == 1 ? "Yes" : "No";
